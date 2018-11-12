@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+mainClassName = 'Main'
+
+sourceCompatibility = "1.9"
+targetCompatibility = "1.9"
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
