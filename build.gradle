@@ -11,3 +11,7 @@ repositories {
     jcenter()
     mavenCentral()
 }
+
+dependencies {
+    compile "io.sentry:sentry:1.7.4"
+}
