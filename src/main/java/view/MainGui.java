@@ -1,4 +1,4 @@
-package gui;
+package view;
 
 import io.sentry.Sentry;
 import javafx.application.Application;
@@ -7,11 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainGui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main_gui.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setMinHeight(440);
         primaryStage.setMinWidth(620);
