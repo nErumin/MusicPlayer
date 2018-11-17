@@ -2,13 +2,9 @@ package model.music.parser;
 
 import javafx.embed.swing.SwingFXUtils;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.*;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -53,7 +49,7 @@ public class MP3Parser extends MusicParser {
             image = (BufferedImage) awk.getImage();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("이미지가 없습니다.\n");
+            super.image = null;
         }
         super.image = SwingFXUtils.toFXImage(image, null);
         return this;
@@ -78,6 +74,7 @@ public class MP3Parser extends MusicParser {
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            super.audioStream = null;
             e.printStackTrace();
         }
         return this;

@@ -1,9 +1,5 @@
 package model.music.parser;
 
-import javafx.scene.image.Image;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.Tag;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
