@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import model.music.parser.MusicParser;
 import model.music.parser.ParserCreator;
 
+import javax.sound.sampled.AudioInputStream;
+
 public class MusicProxy implements MusicData {
     private Music music;
     private String filePath;
@@ -24,6 +26,12 @@ public class MusicProxy implements MusicData {
         nullCheck();
         return music.getArtist();
     }
+
+    public AudioInputStream getAudioStream() {
+        nullCheck();
+        return music.getAudioStream();
+    }
+
     public Image getImage(){
         nullCheck();
         return music.getImage();
