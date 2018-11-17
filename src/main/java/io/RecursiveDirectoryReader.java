@@ -1,5 +1,6 @@
 package io;
 
+import setting.Environment;
 import utility.IterableUtility;
 
 import java.io.File;
@@ -16,11 +17,13 @@ public class RecursiveDirectoryReader extends DirectoryReader {
 
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                final List<String> subDirectoryFiles = IterableUtility.toList(
-                    getFiles(directoryPath + '/' + file.getName())
+                String subdirectoryPath = Environment.getInstance().combinePath(directoryPath, file.getName());
+
+                final List<String> subdirectoryFiles = IterableUtility.toList(
+                    getFiles(subdirectoryPath)
                 );
 
-                files.addAll(subDirectoryFiles);
+                files.addAll(subdirectoryFiles);
             } else {
                 files.add(file.getPath());
             }
