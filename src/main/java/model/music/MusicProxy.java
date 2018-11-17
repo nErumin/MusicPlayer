@@ -28,7 +28,7 @@ public class MusicProxy implements MusicData {
         nullCheck();
         return music.getImage();
     }
-    private void nullCheck(){
+    public void nullCheck(){
         if(music == null) {
             Music music = ParserCreator.getInstance().parseMusic(filePath);
         }
