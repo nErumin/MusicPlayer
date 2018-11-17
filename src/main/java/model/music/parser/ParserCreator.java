@@ -8,9 +8,11 @@ public final class ParserCreator {
     private ParserCreator(){};
 
     public static ParserCreator getInstance(){
-        synchronized (ParserCreator.class) {
-            if (instance == null) {
-                instance = new ParserCreator();
+        if(instance == null) {
+            synchronized (ParserCreator.class) {
+                if (instance == null) {
+                    instance = new ParserCreator();
+                }
             }
         }
         return instance;
