@@ -4,16 +4,19 @@ import javafx.scene.image.Image;
 import model.music.Music;
 
 public abstract class MusicParser {
-    private String title;
-    private Image image;
+    protected String filePath;
+    protected String title;
+    protected String albumName;
+    protected String artist;
+    protected Image image;
 
-    public MusicParser setTitle(String title){
-        this.title = title;
-        return this;
-    }
-    public MusicParser setImage(Image imgae){
-        this.image = image;
-        return this;
-    }
-    abstract public Music build();
+    abstract MusicParser setTitle(String title);
+
+    abstract public MusicParser setImage(Image image);
+
+    abstract public MusicParser setArtist(String artist);
+
+    abstract public MusicParser setAlbumName(String albumName);
+
+    public Music build(){ return new Music(this.title, this.artist, this.albumName, this.image); }
 }

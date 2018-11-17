@@ -7,9 +7,13 @@ public final class ParserCreator {
 
     private ParserCreator(){};
 
-    public static ParserCreator getInsance(){
-        if(instance == null){
-            instance = new ParserCreator();
+    public static ParserCreator getInstance(){
+        if(instance == null) {
+            synchronized (ParserCreator.class) {
+                if (instance == null) {
+                    instance = new ParserCreator();
+                }
+            }
         }
         return instance;
     }
