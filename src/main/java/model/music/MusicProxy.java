@@ -14,25 +14,25 @@ public class MusicProxy implements MusicData {
 
     public String getTitle(){
         if(music == null) {
-            Music music = ParserCreator.getInsance().parseMusic(filePath);
+            Music music = ParserCreator.getInstance().parseMusic(filePath);
         }
         return music.getTitle();
     }
     public String getAlbumName(){
         if(music == null) {
-            Music music = ParserCreator.getInsance().parseMusic(filePath);
+            Music music = ParserCreator.getInstance().parseMusic(filePath);
         }
         return music.getAlbumName();
     }
     public String getArtist(){
         if(music == null) {
-            Music music = ParserCreator.getInsance().parseMusic(filePath);
+            Music music = ParserCreator.getInstance().parseMusic(filePath);
         }
         return music.getArtist();
     }
     public Image getImage(){
         if(music == null) {
-            Music music = ParserCreator.getInsance().parseMusic(filePath);
+            Music music = ParserCreator.getInstance().parseMusic(filePath);
         }
         return music.getImage();
     }
