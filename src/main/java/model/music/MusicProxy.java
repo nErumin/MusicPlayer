@@ -13,22 +13,22 @@ public class MusicProxy implements MusicData {
     }
 
     public String getTitle(){
-        nullCheck(music);
+        nullCheck();
         return music.getTitle();
     }
     public String getAlbumName(){
-        nullCheck(music);
+        nullCheck();
         return music.getAlbumName();
     }
     public String getArtist(){
-        nullCheck(music);
+        nullCheck();
         return music.getArtist();
     }
     public Image getImage(){
-        nullCheck(music);
+        nullCheck();
         return music.getImage();
     }
-    private void nullCheck(Music music){
+    private void nullCheck(){
         if(music == null) {
             this.music = ParserCreator.getInstance().parseMusic(filePath);
         }
