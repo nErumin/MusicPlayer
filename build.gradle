@@ -15,4 +15,5 @@ repositories {
 dependencies {
     compile "io.sentry:sentry:1.7.4"
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'net.jthink', name: 'jaudiotagger', version: '2.2.6-PATHRIK'
 }
