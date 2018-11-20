@@ -12,7 +12,7 @@ public class MainGui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main_gui.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("MP3 Player");
         primaryStage.setMinHeight(440);
         primaryStage.setMinWidth(620);
         primaryStage.setScene(new Scene(root, 600, 400));

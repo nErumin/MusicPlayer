@@ -24,6 +24,7 @@ public class AlarmGui extends Stage {
         this.setMinHeight(230);
         this.setMaxWidth(350);
         this.setMaxHeight(230);
+        this.setTitle("Alarm Window");
 
         AnchorPane alarmPane = (AnchorPane) scene.lookup("#alarmPane");
         alarmPane.getChildren().add(makeAmPmComboBox(15.0,39.0));
