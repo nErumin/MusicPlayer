@@ -2,15 +2,14 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import view.AlarmGui;
 
 public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
-
+    private Boolean isAlarmWindow;
     public void initialize(){
-
+        isAlarmWindow = false;
     }
     public void fullMusicListBtnOnClicked(){ fullMusicListBtn.setText("full Clicked"); }
     public void favoriteMusicListBtnOnClicked(){
@@ -21,7 +20,11 @@ public class MainGuiController {
     }
 
     public void clickAlarmMenuItem(){
-        AlarmGui alarmGui = new AlarmGui();
-        alarmGui.showAndWait();
+        if(!isAlarmWindow) {
+            AlarmGui alarmGui = new AlarmGui();
+            isAlarmWindow = true;
+            alarmGui.showAndWait();
+            isAlarmWindow = false;
+        }
     }
 }
