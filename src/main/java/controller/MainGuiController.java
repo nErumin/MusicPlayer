@@ -57,6 +57,8 @@ public class MainGuiController {
             new NonRecursiveDirectoryReader(), Arrays.asList("mp3", "wav")
         );
 
+        musicFiles.clear();
+
         for (String path : directoryReader.getFiles(chosenDirectory.getPath())) {
             Path musicFilePath = new Path(path);
             MusicData musicData = new MusicProxy(musicFilePath.getFullPath());
