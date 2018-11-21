@@ -2,13 +2,9 @@ package model.music;
 
 import javafx.scene.image.Image;
 import model.AudioData;
-import org.apache.commons.io.IOUtils;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class Music implements MusicData {
     private String title;
@@ -43,11 +39,11 @@ public class Music implements MusicData {
     }
 
     public AudioInputStream getAudioStream() {
-        if (audioData.isDataValid() == false) {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(audioData.getAudioByteData());
+            return new AudioInputStream(inputStream, audioData.getAudioFormat(), audioData.getSampleLength());
+        } catch (NullPointerException exception) {
             return null;
         }
-
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(audioData.getAudioByteData());
-        return new AudioInputStream(inputStream, audioData.getAudioFormat(), audioData.getSampleLength());
     }
 }

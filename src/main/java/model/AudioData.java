@@ -12,20 +12,17 @@ public class AudioData {
     private AudioFormat audioFormat;
     private long sampleLength;
 
-    private boolean dataValid;
-
     public AudioData(AudioInputStream audioStream) {
         resetData(audioStream);
     }
 
     private void resetData(AudioInputStream audioStream) {
+        audioByteData = extractAudioData(audioStream);
+
         if (audioStream != null) {
-            audioByteData = extractAudioData(audioStream);
             audioFormat = audioStream.getFormat();
             sampleLength = audioStream.getFrameLength();
         }
-
-        dataValid = (audioStream == null);
     }
 
     private byte[] extractAudioData(AudioInputStream audioInputStream) {
@@ -34,7 +31,7 @@ public class AudioData {
             IOUtils.copy(audioInputStream, outputStream);
 
             return outputStream.toByteArray();
-        } catch (IOException exception) {
+        } catch (NullPointerException | IOException exception) {
             return new byte[] { };
         }
     }
@@ -49,9 +46,5 @@ public class AudioData {
 
     public long getSampleLength() {
         return sampleLength;
-    }
-
-    public boolean isDataValid() {
-        return dataValid;
     }
 }

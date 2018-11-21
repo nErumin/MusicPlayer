@@ -43,15 +43,15 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildImage() {
-        Artwork awk = tag.getFirstArtwork();
-        BufferedImage image = null;
         try {
-            image = (BufferedImage) awk.getImage();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Artwork awk = tag.getFirstArtwork();
+            BufferedImage image = (BufferedImage) awk.getImage();
+            super.image = SwingFXUtils.toFXImage(image, null);
+        } catch (NullPointerException | IOException exception) {
+            exception.printStackTrace();
             super.image = null;
         }
-        super.image = SwingFXUtils.toFXImage(image, null);
+
         return this;
     }
 
