@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AlarmGui extends Stage {
-    public AlarmGui(){
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("alarm_gui.fxml"));
+public class AlarmSettingGui extends Stage {
+    public AlarmSettingGui(){
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("alarm_setting_gui.fxml"));
 
         Parent root = null;
         try {
