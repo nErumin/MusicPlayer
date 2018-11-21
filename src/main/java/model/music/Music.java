@@ -1,6 +1,7 @@
 package model.music;
 
 import javafx.scene.image.Image;
+import model.AudioData;
 import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.AudioFormat;
@@ -14,10 +15,7 @@ public class Music implements MusicData {
     private String artist;
     private String albumName;
     private Image image;
-
-    private byte[] audioData;
-    private AudioFormat audioFormat;
-    private long audioSample;
+    private AudioData audioData;
 
     public Music(String title, String artist, String albumName, Image image, AudioInputStream audioStream) {
         this.title = title;
@@ -25,20 +23,7 @@ public class Music implements MusicData {
         this.albumName = albumName;
         this.image = image;
 
-        this.audioData = extractAudioData(audioStream);
-        this.audioFormat = audioStream.getFormat();
-        this.audioSample = audioStream.getFrameLength();
-    }
-
-    private byte[] extractAudioData(AudioInputStream audioInputStream) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            IOUtils.copy(audioInputStream, outputStream);
-
-            return outputStream.toByteArray();
-        } catch (IOException exception) {
-            return null;
-        }
+        audioData = new AudioData(audioStream);
     }
 
     public String getTitle() {
@@ -58,7 +43,11 @@ public class Music implements MusicData {
     }
 
     public AudioInputStream getAudioStream() {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(audioData);
-        return new AudioInputStream(inputStream, audioFormat, audioSample);
+        if (audioData.isDataValid() == false) {
+            return null;
+        }
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(audioData.getAudioByteData());
+        return new AudioInputStream(inputStream, audioData.getAudioFormat(), audioData.getSampleLength());
     }
 }
