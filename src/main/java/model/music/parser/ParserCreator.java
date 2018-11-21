@@ -5,7 +5,9 @@ import model.music.Music;
 public final class ParserCreator {
     private static volatile ParserCreator instance = null;
 
-    private ParserCreator(){};
+    private ParserCreator() {
+
+    }
 
     public static ParserCreator getInstance(){
         if(instance == null) {
@@ -18,10 +20,6 @@ public final class ParserCreator {
         return instance;
     }
 
-    public Music parseMusic(String filePath){
-        MusicParser musicParser = createParser(filePath);
-        return musicParser.build();
-    }
     public MusicParser createParser(String filePath) {
         return new MP3Parser(filePath);
     }

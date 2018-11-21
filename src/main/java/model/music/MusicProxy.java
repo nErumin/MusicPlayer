@@ -1,7 +1,6 @@
 package model.music;
 
 import javafx.scene.image.Image;
-import model.music.parser.MusicParser;
 import model.music.parser.ParserCreator;
 
 import javax.sound.sampled.AudioInputStream;
@@ -36,9 +35,17 @@ public class MusicProxy implements MusicData {
         nullCheck();
         return music.getImage();
     }
+
     private void nullCheck(){
         if(music == null) {
-            this.music = ParserCreator.getInstance().parseMusic(filePath);
+            this.music = ParserCreator.getInstance()
+                                      .createParser(filePath)
+            //                          .buildTitle()
+            //                          .buildImage()
+            //                          .buildArtist()
+            //                          .buildAlbumName()
+                                      .buildAudioStream()
+                                      .build();
         }
     }
 }
