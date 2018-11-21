@@ -20,6 +20,8 @@ public class AlarmSystem extends Thread {    // alarm with thread to run under m
         this.hour = hour;
         this.minute = minute;
         this.alarmText = alarmText;
+
+        setAlarm(ampm, hour, minute);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class AlarmSystem extends Thread {    // alarm with thread to run under m
         }
     }
 
-    public void setAlarm(String ampm, String hour, String min) {    // set alarm with ampm, hour, time
+    private void setAlarm(String ampm, String hour, String min) {    // set alarm with ampm, hour, time
 
         int setHour = Integer.parseInt(hour);
         int setMin = Integer.parseInt(min);
@@ -58,12 +60,12 @@ public class AlarmSystem extends Thread {    // alarm with thread to run under m
         alarmTime.set(Calendar.SECOND, +0);
         alarmTime.set(Calendar.MINUTE, +setMin);
 
-        if (ampm.equals("오전")) {
+        if (ampm.equals("A.M.")) {
             if (setHour != 12)
                 alarmTime.set(Calendar.HOUR_OF_DAY, +setHour);
             else
                 alarmTime.set(Calendar.HOUR_OF_DAY, +0);
-        } else if (ampm.equals("오후")) {
+        } else if (ampm.equals("P.M.")) {
             if (setHour != 12)
                 alarmTime.set(Calendar.HOUR_OF_DAY, +setHour + 12);
             else

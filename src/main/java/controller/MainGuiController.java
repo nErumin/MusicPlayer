@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import thread.AlarmSystem;
 import view.AlarmSettingGui;
 
 public class MainGuiController {
@@ -30,6 +31,15 @@ public class MainGuiController {
             AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
             isAlarmWindow = true;
             alarmSettingGui.showAndWait();
+            isAlarmWindow = false;
+
+            String ampm = alarmSettingGui.getAmpmString();
+            String hour = alarmSettingGui.getHourString();
+            String minute = alarmSettingGui.getMinuteString();
+            String text = alarmSettingGui.getTextAreaString();
+            System.out.println(ampm + "   " + hour + "   " + minute + "   " + text);
+
+            new AlarmSystem(ampm, hour, minute, text).run();
         }
     }
 }
