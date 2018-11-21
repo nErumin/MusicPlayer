@@ -4,16 +4,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class AlarmSettingGui extends Stage {
-    private ComboBox<Integer> hourCombobox;
-    private ComboBox<Integer> minuteCombobox;
-    private ComboBox<String> ampmCombobox;
+    private ComboBox<Integer> hourComboBox;
+    private ComboBox<Integer> minuteComboBox;
+    private ComboBox<String> ampmComboBox;
 
     public AlarmSettingGui(){
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("alarm_setting_gui.fxml"));
@@ -31,14 +30,14 @@ public class AlarmSettingGui extends Stage {
         this.setMaxHeight(230);
         this.setTitle("Alarm Window");
 
-        ampmCombobox = makeAmPmComboBox(15.0,39.0);
-        hourCombobox = makeTimeComboBox(12,6,145.0,39.0);
-        minuteCombobox = makeTimeComboBox(59,6,261.0,39.0);
+        ampmComboBox = makeAmPmComboBox(15.0,39.0);
+        hourComboBox = makeTimeComboBox("hourComboBox",12,6,145.0,39.0);
+        minuteComboBox = makeTimeComboBox("minuteComboBox",59,6,261.0,39.0);
 
         AnchorPane alarmPane = (AnchorPane) scene.lookup("#alarmPane");
-        alarmPane.getChildren().add(ampmCombobox);
-        alarmPane.getChildren().add(hourCombobox);
-        alarmPane.getChildren().add(minuteCombobox);
+        alarmPane.getChildren().add(ampmComboBox);
+        alarmPane.getChildren().add(hourComboBox);
+        alarmPane.getChildren().add(minuteComboBox);
         this.setScene(scene);
     }
     private ComboBox<String> makeAmPmComboBox(double layoutX, double layoutY){
@@ -48,9 +47,10 @@ public class AlarmSettingGui extends Stage {
         comboBox.getSelectionModel().select(0);
         comboBox.setLayoutX(layoutX);
         comboBox.setLayoutY(layoutY);
+        comboBox.setId("ampmComboBox");
         return comboBox;
     }
-    private ComboBox<Integer> makeTimeComboBox(int size, int rowCount,double layoutX, double layoutY){
+    private ComboBox<Integer> makeTimeComboBox(String id, int size, int rowCount,double layoutX, double layoutY){
         ComboBox<Integer> comboBox = new ComboBox<>();
         for (int i = 1; i <= size; i++) {
             comboBox.getItems().add(i);
@@ -60,20 +60,7 @@ public class AlarmSettingGui extends Stage {
         comboBox.setPrefSize(10.0,5.0);
         comboBox.setLayoutX(layoutX);
         comboBox.setLayoutY(layoutY);
-
+        comboBox.setId(id);
         return comboBox;
-    }
-
-    public String getAmpmString(){
-        return ampmCombobox.getSelectionModel().getSelectedItem().toString();
-    }
-    public String getHourString(){
-        return hourCombobox.getSelectionModel().getSelectedItem().toString();
-    }
-    public String getMinuteString(){
-        return minuteCombobox.getSelectionModel().getSelectedItem().toString();
-    }
-    public String getTextAreaString(){
-        return ((TextArea)this.getScene().lookup("#alarmTextArea")).getText();
     }
 }
