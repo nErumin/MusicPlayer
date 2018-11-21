@@ -28,7 +28,7 @@
                  </Menu>
                  <Menu mnemonicParsing="false" text="Alarm">
                    <items>
-                     <MenuItem id="setAlarmMenuItem" fx:id="setAlarmMenuItem" mnemonicParsing="false" text="Set Alarm" />
+                     <MenuItem id="setAlarmMenuItem" fx:id="alarmMenuItem" mnemonicParsing="false" onAction="#clickAlarmMenuItem" text="Set Alarm" />
                    </items>
                  </Menu>
                  <Menu mnemonicParsing="false" text="Shutdown">

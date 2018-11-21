@@ -15,6 +15,8 @@ import model.music.MusicProxy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import javafx.scene.control.MenuItem;
+import view.AlarmGui;
 
 public class MainGuiController {
     @FXML
@@ -61,5 +63,10 @@ public class MainGuiController {
 
             musicFiles.put(musicFilePath, musicData);
         }
+    }
+
+    public void clickAlarmMenuItem() {
+        AlarmGui alarmGui = new AlarmGui();
+        alarmGui.showAndWait();
     }
 }
