@@ -46,7 +46,8 @@ public class MainGuiController {
         recentPlayedMusicListBtn.setText("recent Clicked");
     }
 
-    public void handleOpenFolder() throws IOException {
+    @FXML
+    private void handleOpenFolder() throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File chosenDirectory = directoryChooser.showDialog(null);
 
