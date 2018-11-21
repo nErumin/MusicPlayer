@@ -2,29 +2,34 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import view.AlarmGui;
+import view.AlarmSettingGui;
 
 public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
     private Boolean isAlarmWindow;
-    public void initialize(){
+
+    public void initialize() {
         isAlarmWindow = false;
     }
-    public void fullMusicListBtnOnClicked(){ fullMusicListBtn.setText("full Clicked"); }
-    public void favoriteMusicListBtnOnClicked(){
+
+    public void fullMusicListBtnOnClicked() {
+        fullMusicListBtn.setText("full Clicked");
+    }
+
+    public void favoriteMusicListBtnOnClicked() {
         favoriteMusicListBtn.setText("favorite Clicked");
     }
-    public void recentPlayedMusicListBtnOnClicked(){
+
+    public void recentPlayedMusicListBtnOnClicked() {
         recentPlayedMusicListBtn.setText("recent Clicked");
     }
 
-    public void clickAlarmMenuItem(){
-        if(!isAlarmWindow) {
-            AlarmGui alarmGui = new AlarmGui();
+    public void clickAlarmMenuItem() {
+        if (!isAlarmWindow) {
+            AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
             isAlarmWindow = true;
-            alarmGui.showAndWait();
-            isAlarmWindow = false;
+            alarmSettingGui.showAndWait();
         }
     }
 }
