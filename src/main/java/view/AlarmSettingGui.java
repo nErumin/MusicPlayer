@@ -24,15 +24,15 @@ public class AlarmSettingGui extends Stage {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
-        this.setMinWidth(350);
+        this.setMinWidth(380);
         this.setMinHeight(230);
-        this.setMaxWidth(350);
+        this.setMaxWidth(380);
         this.setMaxHeight(230);
         this.setTitle("Alarm Window");
 
         ampmComboBox = makeAmPmComboBox(15.0,39.0);
         hourComboBox = makeTimeComboBox("hourComboBox",12,6,145.0,39.0);
-        minuteComboBox = makeTimeComboBox("minuteComboBox",59,6,261.0,39.0);
+        minuteComboBox = makeTimeComboBox("minuteComboBox",59,6,281.0,39.0);
 
         AnchorPane alarmPane = (AnchorPane) scene.lookup("#alarmPane");
         alarmPane.getChildren().add(ampmComboBox);
@@ -57,7 +57,6 @@ public class AlarmSettingGui extends Stage {
         }
         comboBox.getSelectionModel().select(0);
         comboBox.setVisibleRowCount(rowCount);
-        comboBox.setPrefSize(10.0,5.0);
         comboBox.setLayoutX(layoutX);
         comboBox.setLayoutY(layoutY);
         comboBox.setId(id);

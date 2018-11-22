@@ -5,12 +5,12 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="alarmPane" prefHeight="186.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlarmSettingGuiController">
+<AnchorPane fx:id="alarmPane" prefHeight="186.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlarmSettingGuiController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" prefHeight="13.0" prefWidth="101.0" text="Please set alarm" />
       <Label layoutX="102.0" layoutY="39.0" prefHeight="21.0" prefWidth="52.0" text="Hour : " />
-      <Label layoutX="208.0" layoutY="39.0" prefHeight="21.0" prefWidth="52.0" text="Minute : " />
-      <TextArea fx:id="alarmTextArea" layoutX="15.0" layoutY="71.0" prefHeight="100.0" prefWidth="269.0" text="Alarm" />
-      <Button fx:id="alarmSetBtn" onMouseClicked="#setBtnOnClicked" layoutX="292.0" layoutY="151.0" mnemonicParsing="false" text="Set" />
+      <Label layoutX="228.0" layoutY="39.0" prefHeight="21.0" prefWidth="52.0" text="Minute : " />
+      <TextArea fx:id="alarmTextArea" layoutX="15.0" layoutY="71.0" prefHeight="100.0" prefWidth="282.0" text="Alarm" />
+      <Button fx:id="alarmSetBtn" layoutX="312.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#setBtnOnClicked" text="Set" />
    </children>
 </AnchorPane>
