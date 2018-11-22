@@ -32,6 +32,7 @@ public class AlarmSettingGuiController {
         String text = alarmTextArea.getText();
 
         ((Stage)alarmSetBtn.getScene().getWindow()).close();
-        new AlarmSystem(ampm, hour, minute, text).run();
+        AlarmSystem alarmSystem = new AlarmSystem(ampm, hour, minute, text);
+        alarmSystem.execute();
     }
 }

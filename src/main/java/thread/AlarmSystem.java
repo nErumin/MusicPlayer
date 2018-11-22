@@ -1,13 +1,16 @@
 package thread;
 
+import javafx.application.Platform;
 import view.AlarmShowGui;
 
+import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
-public class AlarmSystem extends Thread {    // alarm with thread to run under main program
+public class AlarmSystem extends SwingWorker<Boolean, Void> {    // alarm with thread to run under main program
 
     private long ringring;
     private String ampm;
@@ -25,16 +28,37 @@ public class AlarmSystem extends Thread {    // alarm with thread to run under m
     }
 
     @Override
-    public void run() {    // to run
+    protected Boolean doInBackground() throws Exception {
         try {
             if (ringring < 0)
                 throw new InterruptedException();
             else {
                 Thread.sleep(ringring);
-                AlarmShowGui alarmShowGui = new AlarmShowGui(ampm, hour, minute, alarmText);
-                alarmShowGui.showAndWait();
             }
         } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected  void done(){
+        Boolean status;
+        try {
+            status = get();
+            if(status) {
+                Platform.runLater(()->{
+                    AlarmShowGui alarmShowGui = new AlarmShowGui(ampm, hour, minute, alarmText);
+                    alarmShowGui.showAndWait();
+                });
+            }
+            else{
+                System.out.println("Error?");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
