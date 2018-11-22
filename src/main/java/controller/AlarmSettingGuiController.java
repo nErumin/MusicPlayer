@@ -1,12 +1,11 @@
 package controller;
 
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import thread.AlarmSystem;
 
 public class AlarmSettingGuiController {
@@ -20,7 +19,7 @@ public class AlarmSettingGuiController {
     public void initialize(){
     }
 
-    public void setBtnOnClicked(Event e){
+    public void setBtnOnClicked(){
         Scene scene = alarmSetBtn.getScene();
 
         hourComboBox = (ComboBox)scene.lookup("#hourComboBox");
@@ -32,8 +31,7 @@ public class AlarmSettingGuiController {
         String minute = minuteComboBox.getSelectionModel().getSelectedItem().toString();
         String text = alarmTextArea.getText();
 
-        ((Node)e.getSource()).getScene().getWindow().hide();
+        ((Stage)alarmSetBtn.getScene().getWindow()).close();
         new AlarmSystem(ampm, hour, minute, text).run();
-
     }
 }
