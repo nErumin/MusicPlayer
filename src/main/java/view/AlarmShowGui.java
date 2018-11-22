@@ -21,14 +21,18 @@ public class AlarmShowGui extends Stage {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
-        this.setMinWidth(350);
+        this.setMinWidth(360);
         this.setMinHeight(230);
-        this.setMaxWidth(350);
+        this.setMaxWidth(360);
         this.setMaxHeight(230);
         ((Label)scene.lookup("#alarmShowAmpmLabel")).setText(Ampm);
-        ((Label)scene.lookup("#alarmShowHourLabel")).setText(hour);
-        ((Label)scene.lookup("#alarmShowMinuteLabel")).setText(minute);
-        ((TextArea)scene.lookup("#alarmShowTextArea")).setText(alarmText);
+        ((Label)scene.lookup("#alarmShowTimeLabel")).setText(hour + " : " + minute);
+
+        TextArea textArea = (TextArea)scene.lookup("#alarmShowTextArea");
+        textArea.setText(alarmText);
+        textArea.setEditable(false);
+        textArea.setStyle("-fx-text-fill:black;");
+
         this.setTitle("Alarm Ringing");
 
         this.setScene(scene);
