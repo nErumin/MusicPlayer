@@ -53,9 +53,6 @@ public class AlarmSystem extends SwingWorker<Boolean, Void> {    // alarm with t
                     alarmShowGui.showAndWait();
                 });
             }
-            else{
-                System.out.println("Error?");
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
