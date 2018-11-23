@@ -14,12 +14,12 @@ public class AlarmSettingGuiController {
     @FXML
     private TextArea alarmTextArea;
 
-    private ComboBox hourComboBox, minuteComboBox, ampmComboBox;
-
     public void initialize(){
     }
 
     public void setBtnOnClicked(){
+        ComboBox hourComboBox, minuteComboBox, ampmComboBox;
+
         Scene scene = alarmSetBtn.getScene();
 
         hourComboBox = (ComboBox)scene.lookup("#hourComboBox");
