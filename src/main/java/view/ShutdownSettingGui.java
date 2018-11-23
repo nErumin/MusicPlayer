@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -33,6 +34,10 @@ public class ShutdownSettingGui extends Stage {
         shutdownPane.getChildren().add(timeComboBox);
 
         this.setScene(scene);
+    }
+    public void makeJustOneWindow(Stage owner){
+        this.initModality(Modality.WINDOW_MODAL);
+        this.initOwner(owner);
     }
     private ComboBox<String> makeSetTimeComboBox(String id, double layoutX, double layoutY){
         ComboBox<String> comboBox = new ComboBox<>();

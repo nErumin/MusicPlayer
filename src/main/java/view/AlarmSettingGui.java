@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class AlarmSettingGui extends Stage {
         alarmPane.getChildren().add(minuteComboBox);
 
         this.setScene(scene);
+    }
+    public void makeJustOneWindow(Stage owner){
+        this.initModality(Modality.WINDOW_MODAL);
+        this.initOwner(owner);
     }
     private ComboBox<String> makeAmPmComboBox(double layoutX, double layoutY){
         ComboBox<String> comboBox = new ComboBox<>();

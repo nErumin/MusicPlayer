@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -28,19 +29,16 @@ public class MainGuiController {
     }
 
     public void clickAlarmMenuItem() {
-        if (!isAlarmWindow) {
-            AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
-            isAlarmWindow = true;
-            alarmSettingGui.showAndWait();
-            isAlarmWindow = false;
-        }
+        Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
+        AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
+        alarmSettingGui.makeJustOneWindow(stage);
+        alarmSettingGui.showAndWait();
     }
+
     public void clickShutdownMenuItem(){
-        if (!isShutdownWindow) {
-            ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
-            isShutdownWindow = true;
-            shutdownSettingGui.showAndWait();
-            isShutdownWindow = false;
-        }
+        Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
+        ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
+        shutdownSettingGui.makeJustOneWindow(stage);
+        shutdownSettingGui.showAndWait();
     }
 }
