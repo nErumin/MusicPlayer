@@ -33,7 +33,7 @@
                  </Menu>
                  <Menu mnemonicParsing="false" text="Shutdown">
                    <items>
-                     <MenuItem id="setShutdownMenuItem" fx:id="setShutdownMenuItem" mnemonicParsing="false" text="Set Shutdown" />
+                     <MenuItem id="setShutdownMenuItem" fx:id="setShutdownMenuItem" onAction="#clickShutdownMenuItem" mnemonicParsing="false" text="Set Shutdown" />
                    </items>
                  </Menu>
                </menus>

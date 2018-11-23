@@ -38,6 +38,7 @@ public class AlarmSettingGui extends Stage {
         alarmPane.getChildren().add(ampmComboBox);
         alarmPane.getChildren().add(hourComboBox);
         alarmPane.getChildren().add(minuteComboBox);
+
         this.setScene(scene);
     }
     private ComboBox<String> makeAmPmComboBox(double layoutX, double layoutY){
