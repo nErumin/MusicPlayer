@@ -18,6 +18,10 @@ public class AlarmSettingGuiController {
     }
 
     public void setBtnOnClicked(){
+        makeNewAlarm();
+    }
+    
+    private void makeNewAlarm(){
         ComboBox hourComboBox, minuteComboBox, ampmComboBox;
 
         Scene scene = alarmSetBtn.getScene();
