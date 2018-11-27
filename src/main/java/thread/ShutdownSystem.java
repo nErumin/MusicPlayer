@@ -12,7 +12,7 @@ public class ShutdownSystem extends SwingWorker<Boolean, Void> {
 
     public static ShutdownSystem getInstance() {
         if (uniqueInstance == null) {
-            synchronized (MainGui.class) {
+            synchronized (ShutdownSystem.class) {
                 if (uniqueInstance == null) {
                     uniqueInstance = new ShutdownSystem();
                 }
