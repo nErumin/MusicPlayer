@@ -15,6 +15,11 @@ public class ShutdownSettingGuiController {
     }
 
     public void okBtnClicked(){
+        updateShutdown();
+        ((Stage)shutdownSetBtn.getScene().getWindow()).close();
+    }
+
+    private void updateShutdown(){
         ComboBox timeComboBox;
 
         Scene scene = shutdownSetBtn.getScene();
@@ -26,7 +31,5 @@ public class ShutdownSettingGuiController {
         ShutdownSystem shutdownInstance = ShutdownSystem.getInstance();
         shutdownInstance.setShutdown(selectTime);
         shutdownInstance.execute();
-
-        ((Stage)shutdownSetBtn.getScene().getWindow()).close();
     }
 }
