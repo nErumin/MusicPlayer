@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ShutdownSettingGui extends Stage {
+public class ShutdownSettingGui extends Stage implements JustOneWindow{
     private ComboBox timeComboBox;
     public ShutdownSettingGui(){
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("shutdown_setting_gui.fxml"));
@@ -35,10 +35,13 @@ public class ShutdownSettingGui extends Stage {
 
         this.setScene(scene);
     }
+
+    @Override
     public void makeJustOneWindow(Stage owner){
         this.initModality(Modality.WINDOW_MODAL);
         this.initOwner(owner);
     }
+
     private ComboBox<String> makeSetTimeComboBox(String id, double layoutX, double layoutY){
         ComboBox<String> comboBox = new ComboBox<>();
 

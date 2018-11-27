@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AlarmSettingGui extends Stage {
+public class AlarmSettingGui extends Stage implements JustOneWindow {
     private ComboBox<Integer> hourComboBox;
     private ComboBox<Integer> minuteComboBox;
     private ComboBox<String> ampmComboBox;
@@ -42,10 +42,13 @@ public class AlarmSettingGui extends Stage {
 
         this.setScene(scene);
     }
+
+    @Override
     public void makeJustOneWindow(Stage owner){
         this.initModality(Modality.WINDOW_MODAL);
         this.initOwner(owner);
     }
+
     private ComboBox<String> makeAmPmComboBox(double layoutX, double layoutY){
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.getItems().add("A.M.");
