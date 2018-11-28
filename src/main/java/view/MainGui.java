@@ -2,20 +2,29 @@ package view;
 
 import io.sentry.Sentry;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainGui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main_gui.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("MP3 Player");
         primaryStage.setMinHeight(440);
         primaryStage.setMinWidth(620);
         primaryStage.setScene(new Scene(root, 600, 400));
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                Platform.exit();
+            }
+        });
         primaryStage.show();
     }
 

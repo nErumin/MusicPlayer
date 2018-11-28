@@ -15,12 +15,14 @@ import model.music.MusicProxy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import javafx.scene.control.MenuItem;
-import view.AlarmGui;
+import javafx.stage.Stage;
+import view.AlarmSettingGui;
+import view.ShutdownSettingGui;
 
 public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
+
     @FXML
     private ListView<String> musicListView;
     private ObservableMap<Path, MusicData> musicFiles;
@@ -38,13 +40,15 @@ public class MainGuiController {
         musicFiles.forEach(((path, musicData) -> listViewItems.add(path.getFileName())));
     }
 
-    public void fullMusicListBtnOnClicked(){
+    public void fullMusicListBtnOnClicked() {
         fullMusicListBtn.setText("full Clicked");
     }
-    public void favoriteMusicListBtnOnClicked(){
+
+    public void favoriteMusicListBtnOnClicked() {
         favoriteMusicListBtn.setText("favorite Clicked");
     }
-    public void recentPlayedMusicListBtnOnClicked(){
+
+    public void recentPlayedMusicListBtnOnClicked() {
         recentPlayedMusicListBtn.setText("recent Clicked");
     }
 
@@ -68,7 +72,16 @@ public class MainGuiController {
     }
 
     public void clickAlarmMenuItem() {
-        AlarmGui alarmGui = new AlarmGui();
-        alarmGui.showAndWait();
+        Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
+        AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
+        alarmSettingGui.makeJustOneWindow(stage);
+        alarmSettingGui.showAndWait();
+    }
+
+    public void clickShutdownMenuItem(){
+        Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
+        ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
+        shutdownSettingGui.makeJustOneWindow(stage);
+        shutdownSettingGui.showAndWait();
     }
 }
