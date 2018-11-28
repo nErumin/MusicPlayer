@@ -114,16 +114,16 @@ public class MainGuiController {
                 if (path.getFileName().equals(selectedFileName)) {
                     startClip(musicData.getAudioStream());
                 }
-            } catch (LineUnavailableException exception) {
+            } catch (IOException | LineUnavailableException exception) {
                 exception.printStackTrace();
             }
         }));
     }
 
-    private void startClip(AudioInputStream audioStream) throws LineUnavailableException {
+    private void startClip(AudioInputStream audioStream) throws LineUnavailableException, IOException {
         if (audioStream != null) {
             Clip clip = AudioSystem.getClip();
-            clip.open();
+            clip.open(audioStream);
             clip.start();
         }
     }
