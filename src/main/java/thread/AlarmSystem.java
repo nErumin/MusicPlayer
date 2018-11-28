@@ -14,17 +14,17 @@ public class AlarmSystem extends SwingWorker<Boolean, Void> {    // alarm with t
 
     private long ringring;
     private String ampm;
-    private String hour;
-    private String minute;
+    private int hour;
+    private int minute;
     private String alarmText;
 
-    public AlarmSystem(String ampm, String hour, String minute, String alarmText) {
+    public AlarmSystem(String ampm, int hour, int minute, String alarmText) {
         this.ampm = ampm;
         this.hour = hour;
         this.minute = minute;
         this.alarmText = alarmText;
 
-        setAlarm(ampm, hour, minute);
+        setAlarm();
     }
 
     @Override
@@ -60,10 +60,7 @@ public class AlarmSystem extends SwingWorker<Boolean, Void> {    // alarm with t
         }
     }
 
-    private void setAlarm(String ampm, String hour, String min) {    // set alarm with ampm, hour, time
-
-        int setHour = Integer.parseInt(hour);
-        int setMin = Integer.parseInt(min);
+    private void setAlarm() {    // set alarm with ampm, hour, time
 
         Calendar today = Calendar.getInstance();
         Calendar alarmTime = Calendar.getInstance();
@@ -78,22 +75,21 @@ public class AlarmSystem extends SwingWorker<Boolean, Void> {    // alarm with t
             e1.printStackTrace();
         }
 
-        alarmTime.set(Calendar.SECOND, +0);
-        alarmTime.set(Calendar.MINUTE, +setMin);
+        alarmTime.set(Calendar.SECOND, + 0);
+        alarmTime.set(Calendar.MINUTE, + minute);
 
         if (ampm.equals("A.M.")) {
-            if (setHour != 12)
-                alarmTime.set(Calendar.HOUR_OF_DAY, +setHour);
+            if (hour != 12)
+                alarmTime.set(Calendar.HOUR_OF_DAY, + hour);
             else
                 alarmTime.set(Calendar.HOUR_OF_DAY, +0);
         } else if (ampm.equals("P.M.")) {
-            if (setHour != 12)
-                alarmTime.set(Calendar.HOUR_OF_DAY, +setHour + 12);
+            if (hour != 12)
+                alarmTime.set(Calendar.HOUR_OF_DAY, + hour + 12);
             else
                 alarmTime.set(Calendar.HOUR_OF_DAY, +12);
         }
 
         ringring = alarmTime.getTimeInMillis() - currentTime.getTimeInMillis();
-
     }
 }

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class AlarmShowGui extends Stage {
-    public AlarmShowGui(String Ampm, String hour, String minute, String alarmText){
+    public AlarmShowGui(String Ampm, int hour, int minute, String alarmText){
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("alarm_show_gui.fxml"));
 
         Parent root = null;
@@ -26,7 +26,7 @@ public class AlarmShowGui extends Stage {
         this.setMaxWidth(360);
         this.setMaxHeight(230);
         ((Label)scene.lookup("#alarmShowAmpmLabel")).setText(Ampm);
-        ((Label)scene.lookup("#alarmShowTimeLabel")).setText(hour + " : " + minute);
+        ((Label)scene.lookup("#alarmShowTimeLabel")).setText(padZero(hour) + " : " + padZero(minute));
 
         TextArea textArea = (TextArea)scene.lookup("#alarmShowTextArea");
         textArea.setText(alarmText);
@@ -34,7 +34,17 @@ public class AlarmShowGui extends Stage {
         textArea.setStyle("-fx-text-fill:black;");
 
         this.setTitle("Alarm Ringing");
-
         this.setScene(scene);
+    }
+
+    private String padZero(int time){
+        String paddedTime;
+        if(time<10){
+            paddedTime = "0"+ Integer.toString(time);
+        }
+        else{
+            paddedTime = Integer.toString(time);
+        }
+        return paddedTime;
     }
 }
