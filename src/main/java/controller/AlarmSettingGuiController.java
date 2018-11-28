@@ -31,8 +31,8 @@ public class AlarmSettingGuiController {
         ampmComboBox = (ComboBox)scene.lookup("#ampmComboBox");
 
         String ampm = ampmComboBox.getSelectionModel().getSelectedItem().toString();
-        String hour = hourComboBox.getSelectionModel().getSelectedItem().toString();
-        String minute = minuteComboBox.getSelectionModel().getSelectedItem().toString();
+        int hour = (int)hourComboBox.getSelectionModel().getSelectedItem();
+        int minute = (int)minuteComboBox.getSelectionModel().getSelectedItem();
         String text = alarmTextArea.getText();
 
         ((Stage)alarmSetBtn.getScene().getWindow()).close();
