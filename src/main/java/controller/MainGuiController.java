@@ -18,6 +18,14 @@ import java.util.Arrays;
 import javafx.stage.Stage;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
+import java.util.stream.Collectors;
+
+import utility.IterableUtility;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 
 public class MainGuiController {
     @FXML
@@ -62,8 +70,16 @@ public class MainGuiController {
         );
 
         musicFiles.clear();
+        fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+    }
 
-        for (String path : directoryReader.getFiles(chosenDirectory.getPath())) {
+    private void fillMusicFileListView(Iterable<String> filePaths) {
+        Iterable<String> nameSortedFilePaths = IterableUtility.toList(filePaths)
+                                                              .stream()
+                                                              .sorted()
+                                                              .collect(Collectors.toList());
+
+        for (String path : nameSortedFilePaths) {
             Path musicFilePath = new Path(path);
             MusicData musicData = new MusicProxy(musicFilePath.getFullPath());
 
@@ -83,5 +99,32 @@ public class MainGuiController {
         ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
         shutdownSettingGui.makeJustOneWindow(stage);
         shutdownSettingGui.showAndWait();
+    }
+
+    @FXML
+    private void handleMusicListItemClicked() {
+        String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
+
+        playMusic(selectedFileName);
+    }
+
+    private void playMusic(String selectedFileName) {
+        musicFiles.forEach(((path, musicData) -> {
+            try {
+                if (path.getFileName().equals(selectedFileName)) {
+                    startClip(musicData.getAudioStream());
+                }
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
+            }
+        }));
+    }
+
+    private void startClip(AudioInputStream audioStream) throws LineUnavailableException {
+        if (audioStream != null) {
+            Clip clip = AudioSystem.getClip();
+            clip.open();
+            clip.start();
+        }
     }
 }
