@@ -14,13 +14,12 @@ import model.music.MusicProxy;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import javafx.stage.Stage;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
-import java.util.stream.Collectors;
-
-import utility.IterableUtility;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -45,7 +44,11 @@ public class MainGuiController {
         ObservableList<String> listViewItems = musicListView.getItems();
 
         listViewItems.clear();
-        musicFiles.forEach(((path, musicData) -> listViewItems.add(path.getFileName())));
+        listViewItems.addAll(musicFiles.keySet()
+                                       .stream()
+                                       .map(Path::getFileName)
+                                       .sorted()
+                                       .collect(Collectors.toList()));
     }
 
     public void fullMusicListBtnOnClicked() {
@@ -74,12 +77,7 @@ public class MainGuiController {
     }
 
     private void fillMusicFileListView(Iterable<String> filePaths) {
-        Iterable<String> nameSortedFilePaths = IterableUtility.toList(filePaths)
-                                                              .stream()
-                                                              .sorted()
-                                                              .collect(Collectors.toList());
-
-        for (String path : nameSortedFilePaths) {
+        for (String path : filePaths) {
             Path musicFilePath = new Path(path);
             MusicData musicData = new MusicProxy(musicFilePath.getFullPath());
 
