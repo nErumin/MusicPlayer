@@ -45,7 +45,6 @@ public class MP3Parser extends MusicParser {
             BufferedImage image = (BufferedImage) awk.getImage();
             super.image = SwingFXUtils.toFXImage(image, null);
         } catch (NullPointerException | IOException exception) {
-            exception.printStackTrace();
             super.image = null;
         }
 
