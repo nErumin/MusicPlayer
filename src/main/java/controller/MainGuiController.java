@@ -3,21 +3,18 @@ package controller;
 import io.DirectoryReader;
 import io.FileExtensionFilteredDirectoryReader;
 import io.NonRecursiveDirectoryReader;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import model.Path;
 import model.music.MusicData;
 import model.music.MusicProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javafx.stage.Stage;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -25,6 +22,10 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MainGuiController {
     @FXML
@@ -51,15 +52,18 @@ public class MainGuiController {
                                        .collect(Collectors.toList()));
     }
 
-    public void fullMusicListBtnOnClicked() {
+    @FXML
+    private void fullMusicListBtnOnClicked() {
         fullMusicListBtn.setText("full Clicked");
     }
 
-    public void favoriteMusicListBtnOnClicked() {
+    @FXML
+    private void favoriteMusicListBtnOnClicked() {
         favoriteMusicListBtn.setText("favorite Clicked");
     }
 
-    public void recentPlayedMusicListBtnOnClicked() {
+    @FXML
+    private void recentPlayedMusicListBtnOnClicked() {
         recentPlayedMusicListBtn.setText("recent Clicked");
     }
 
@@ -85,14 +89,16 @@ public class MainGuiController {
         }
     }
 
-    public void clickAlarmMenuItem() {
+    @FXML
+    private void clickAlarmMenuItem() {
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
         alarmSettingGui.makeJustOneWindow(stage);
         alarmSettingGui.showAndWait();
     }
 
-    public void clickShutdownMenuItem(){
+    @FXML
+    private void clickShutdownMenuItem(){
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
         shutdownSettingGui.makeJustOneWindow(stage);
