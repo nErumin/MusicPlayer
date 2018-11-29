@@ -15,17 +15,12 @@ public class NormalMusicIterator extends MusicIterator {
     }
 
     @Override
-    public boolean moveNext() {
+    public void moveNext() {
         Direction iteratorDirection = getIteratorDirection();
         List<MusicData> musicDataCollection = getMusics();
-        int nextPosition = iteratorDirection.nextPosition(musicDataCollection, currentPosition);
 
-        if (nextPosition < musicDataCollection.size()) {
-            setCurrentMusicData(musicDataCollection.get(nextPosition));
-            return true;
-        }
-
-        return false;
+        currentPosition = iteratorDirection.nextPosition(musicDataCollection, currentPosition);
+        setCurrentMusicData(musicDataCollection.get(currentPosition));
     }
 
 
@@ -50,5 +45,14 @@ public class NormalMusicIterator extends MusicIterator {
                 return;
             }
         }
+    }
+
+    @Override
+    public boolean hasNext() {
+        Direction iteratorDirection = getIteratorDirection();
+        List<MusicData> musicDataCollection = getMusics();
+        int nextPosition = iteratorDirection.nextPosition(musicDataCollection, currentPosition);
+
+        return nextPosition < musicDataCollection.size();
     }
 }

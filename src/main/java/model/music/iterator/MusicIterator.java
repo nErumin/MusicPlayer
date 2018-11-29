@@ -40,5 +40,6 @@ public abstract class MusicIterator {
 
     public abstract void reset();
     public abstract void resetFor(MusicData musicData);
-    public abstract boolean moveNext();
+    public abstract boolean hasNext();
+    public abstract void moveNext();
 }
