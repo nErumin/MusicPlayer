@@ -31,14 +31,17 @@ public class NormalMusicIterator extends MusicIterator {
 
     @Override
     public void reset() {
-        currentPosition = -1;
-        setCurrentMusicData(null);
+        currentPosition = 0;
+
+        List<MusicData> musicDataCollection = getMusics();
+        MusicData defaultMusicData =
+            musicDataCollection.size() > 0 ? musicDataCollection.get(currentPosition) : null;
+
+        setCurrentMusicData(defaultMusicData);
     }
 
     @Override
     public void resetFor(MusicData musicData) {
-        reset();
-
         List<MusicData> musicDataCollection = getMusics();
 
         for (currentPosition = 0; currentPosition < musicDataCollection.size(); ++currentPosition) {
