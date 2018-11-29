@@ -10,6 +10,7 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import model.Path;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
+
+    @FXML
+    private ImageView musicImage;
 
     @FXML
     private ListView<String> musicListView;
@@ -110,6 +114,8 @@ public class MainGuiController {
         String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
 
         playMusic(selectedFileName);
+
+
     }
 
     private void playMusic(String selectedFileName) {
@@ -117,6 +123,7 @@ public class MainGuiController {
             try {
                 if (path.getFileName().equals(selectedFileName)) {
                     startClip(musicData.getAudioStream());
+                    musicImage.setImage(musicData.getImage());
                 }
             } catch (IOException | LineUnavailableException exception) {
                 exception.printStackTrace();
