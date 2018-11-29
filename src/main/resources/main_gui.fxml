@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainGuiController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainGuiController">
    <children>
        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <top>
@@ -23,7 +23,7 @@
                <menus>
                  <Menu mnemonicParsing="false" text="File">
                    <items>
-                     <MenuItem id="openFolderMenuItem" fx:id="openFolderMenuItem" mnemonicParsing="false" text="Open Folder" />
+                     <MenuItem id="openFolderMenuItem" fx:id="openFolderMenuItem" mnemonicParsing="false" onAction="#handleOpenFolder" text="Open Folder" />
                    </items>
                  </Menu>
                  <Menu mnemonicParsing="false" text="Alarm">
@@ -44,7 +44,7 @@
                <items>
                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                       <children>
-                         <ListView id="musicList" layoutX="21.0" layoutY="47.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                         <ListView id="musicList" fx:id="musicListView" layoutX="21.0" layoutY="47.0" onMouseClicked="#handleMusicListItemClicked" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                       </children>
                   </AnchorPane>
                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
