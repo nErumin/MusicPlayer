@@ -70,12 +70,17 @@ public class MusicPlayer {
     }
 
     public PlayerMemento createMemento() {
-        return new PlayerMemento(playingClip.getMicrosecondLength());
+        return new PlayerMemento(playingInputStream, playingClip.getMicrosecondPosition());
     }
 
     public void recoverState(PlayerMemento memento) {
-        if (playingClip != null) {
+        if (playingClip != null &&
+            playingInputStream != null &&
+            memento.getPlayingStream().equals(playingInputStream)) {
+
+            playingClip.stop();
             playingClip.setMicrosecondPosition(memento.getProgressedMilliSeconds());
+            playingClip.start();
         }
     }
 }
