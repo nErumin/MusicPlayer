@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javafx.stage.Stage;
+import model.music.PlayerMemento;
 import model.music.iterator.BackwardDirection;
 import model.music.iterator.ForwardDirection;
 import model.music.iterator.MusicIterator;
@@ -78,7 +79,10 @@ public class MainGuiController {
         );
 
         musicFiles.clear();
-        fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+
+        if (chosenDirectory != null) {
+            fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+        }
     }
 
     private void fillMusicFileListView(Iterable<String> filePaths) {
