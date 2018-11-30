@@ -45,6 +45,18 @@ public class MusicPlayer {
         }
     }
 
+    public void pausePlay() {
+        if (playingClip.isRunning()) {
+            playingClip.stop();
+        }
+    }
+
+    public void resumePlay() {
+        if (playingClip.isRunning() == false) {
+            playingClip.start();
+        }
+    }
+
     public void stopPlay() {
         playingClip.close();
     }
