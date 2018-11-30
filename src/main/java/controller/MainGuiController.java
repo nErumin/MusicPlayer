@@ -7,9 +7,11 @@ import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import model.Path;
 import model.music.MusicData;
+import model.music.MusicPlayer;
 import model.music.MusicProxy;
 
 import java.io.File;
@@ -18,13 +20,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javafx.stage.Stage;
+import model.music.iterator.BackwardDirection;
+import model.music.iterator.ForwardDirection;
+import model.music.iterator.MusicIterator;
+import model.music.iterator.NormalMusicIterator;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.*;
 
 public class MainGuiController {
     @FXML
@@ -33,10 +36,12 @@ public class MainGuiController {
     @FXML
     private ListView<String> musicListView;
     private ObservableMap<Path, MusicData> musicFiles;
+    private MusicPlayer musicPlayer;
 
-    public void initialize() {
+    public void initialize() throws LineUnavailableException {
+        musicPlayer = new MusicPlayer();
+
         musicFiles = FXCollections.observableHashMap();
-
         musicFiles.addListener(this::handleFileListChanged);
     }
 
@@ -100,29 +105,38 @@ public class MainGuiController {
     }
 
     @FXML
-    private void handleMusicListItemClicked() {
-        String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
+    private void handleMusicListItemClicked(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
 
-        playMusic(selectedFileName);
-    }
-
-    private void playMusic(String selectedFileName) {
-        musicFiles.forEach(((path, musicData) -> {
-            try {
-                if (path.getFileName().equals(selectedFileName)) {
-                    startClip(musicData.getAudioStream());
-                }
-            } catch (IOException | LineUnavailableException exception) {
-                exception.printStackTrace();
-            }
-        }));
-    }
-
-    private void startClip(AudioInputStream audioStream) throws LineUnavailableException, IOException {
-        if (audioStream != null) {
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
+            processMusicFilesForPlaying(selectedFileName);
         }
+    }
+
+    private void processMusicFilesForPlaying(String selectedFileName) {
+        List<Map.Entry<Path, MusicData>> sortedMusicFiles
+            = musicFiles.entrySet().stream()
+                                   .sorted(Comparator.comparing(leftPair -> leftPair.getKey().getFileName()))
+                                   .collect(Collectors.toList());
+
+        List<MusicData> musicDataList
+            = sortedMusicFiles.stream()
+                              .map(Map.Entry::getValue)
+                              .collect(Collectors.toList());
+
+        sortedMusicFiles.stream()
+                        .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+                        .findFirst()
+                        .ifPresent(entry -> startMusicPlayer(musicDataList, entry.getValue()));
+    }
+
+    private void startMusicPlayer(Collection<MusicData> musicDataCollection, MusicData selectedMusicData) {
+        MusicIterator iterator = new NormalMusicIterator(musicDataCollection, new ForwardDirection());
+        iterator.resetFor(selectedMusicData);
+
+        musicPlayer.stopPlay();
+
+        musicPlayer.setIterationMode(iterator);
+        musicPlayer.startPlay();
     }
 }
