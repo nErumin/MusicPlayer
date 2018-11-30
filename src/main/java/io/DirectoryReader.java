@@ -1,8 +1,8 @@
 package io;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.NotDirectoryException;
+    import java.io.File;
+    import java.io.IOException;
+    import java.nio.file.NotDirectoryException;
 
 public abstract class DirectoryReader {
     public abstract Iterable<String> getFiles(String directoryPath) throws IOException;

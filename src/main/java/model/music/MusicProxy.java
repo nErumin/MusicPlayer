@@ -8,10 +8,13 @@ import javax.sound.sampled.AudioInputStream;
 
 public class MusicProxy implements MusicData {
     private Music music;
-    private String filePath;
+    private Lyric lyric;
+    private String musicFilePath;
+    private String lyricFilePath;
 
-    public MusicProxy(String filePath){
-        this.filePath = filePath;
+    public MusicProxy(String musicFilePath, String lyricFilePath){
+        this.musicFilePath = musicFilePath;
+        this.lyricFilePath = lyricFilePath;
     }
 
     public String getTitle(){
@@ -38,7 +41,11 @@ public class MusicProxy implements MusicData {
     }
     private void nullCheck(){
         if(music == null) {
-            this.music = ParserCreator.getInstance().parseMusic(filePath);
+            this.music = ParserCreator.getInstance().parseMusic(musicFilePath);
         }
+        if(lyric == null){
+            //가사가 parsing 안되어있으면 parsing해주고, 가사 파일 자체가 없으면 ???
+        }
+
     }
 }

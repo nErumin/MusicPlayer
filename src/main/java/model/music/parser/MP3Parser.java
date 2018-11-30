@@ -1,13 +1,14 @@
 package model.music.parser;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.media.Media;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.images.*;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -69,15 +70,36 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildAudioStream() {
+
         try {
-            super.audioStream = getAudioInputStream(file);
+            File file = new File(super.filePath);
+            System.out.println(file);
+            AudioFileFormat baseFileFormat = null;
+            AudioFormat baseFormat = null;
+            baseFileFormat = AudioSystem.getAudioFileFormat(file);
+            baseFormat = baseFileFormat.getFormat();
+            AudioFileFormat.Type type = baseFileFormat.getType();
+            float frequency = baseFormat.getSampleRate();
+
+
+//            File file = new File(super.filePath);
+//            AudioInputStream in = AudioSystem.getAudioInputStream(file);
+//            AudioFormat baseFormat = in.getFormat();
+//            AudioFormat decodedFormat = new AudioFormat(
+//                AudioFormat.Encoding.PCM_SIGNED,
+//                baseFormat.getSampleRate(),
+//                16,
+//                baseFormat.getChannels(),
+//                baseFormat.getChannels() * 2,
+//                baseFormat.getSampleRate(),
+//                false);
+
+
+            return this;
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            super.audioStream = null;
             e.printStackTrace();
         }
-        return this;
-
     }
 }
