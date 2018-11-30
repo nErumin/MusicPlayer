@@ -1,14 +1,20 @@
 package model.music.parser;
 
-import model.music.Music;
+import org.apache.commons.io.FilenameUtils;
+import utility.ReflectionUtility;
+
+import java.lang.reflect.Constructor;
 
 public final class ParserCreator {
+    private static final String PACKAGE_NAME = "model.music.parser";
     private static volatile ParserCreator instance = null;
 
-    private ParserCreator(){};
+    private ParserCreator() {
 
-    public static ParserCreator getInstance(){
-        if(instance == null) {
+    }
+
+    public static ParserCreator getInstance() {
+        if (instance == null) {
             synchronized (ParserCreator.class) {
                 if (instance == null) {
                     instance = new ParserCreator();
@@ -18,11 +24,26 @@ public final class ParserCreator {
         return instance;
     }
 
-    public Music parseMusic(String filePath){
-        MusicParser musicParser = createParser(filePath);
-        return musicParser.build();
-    }
     public MusicParser createParser(String filePath) {
-        return new MP3Parser(filePath);
+        try {
+            Class<?> parserClass = fetchParserClass(filePath);
+            Constructor<?> constructor = parserClass.getConstructor(String.class);
+
+            return (MusicParser) constructor.newInstance(filePath);
+        } catch (Exception exception) {
+            return new MP3Parser(filePath);
+        }
+    }
+
+    private Class<?> fetchParserClass(String filePath) throws ClassNotFoundException {
+        String extension = FilenameUtils.getExtension(filePath).toLowerCase();
+
+        for (Class<?> parserClass : ReflectionUtility.getClassesInPackage(PACKAGE_NAME)) {
+            if (parserClass.getSimpleName().toLowerCase().startsWith(extension)) {
+                return parserClass;
+            }
+        }
+
+        throw new ClassNotFoundException();
     }
 }

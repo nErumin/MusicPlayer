@@ -24,7 +24,7 @@ public abstract class MusicParser {
 
     abstract public MusicParser buildAudioStream();
 
-    public Music build(){ return new Music(this.title, this.artist, this.albumName, this.image, this.audioStream); }
-
-
+    public Music build() {
+        return new Music(this.title, this.artist, this.albumName, this.image, this.audioStream);
+    }
 }

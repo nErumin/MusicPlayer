@@ -1,7 +1,7 @@
 package model.music.parser;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.media.Media;
+import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
@@ -10,11 +10,7 @@ import org.jaudiotagger.tag.images.*;
 
 import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import static javax.sound.sampled.AudioSystem.getAudioInputStream;
-
+import java.io.*;
 
 public class MP3Parser extends MusicParser {
 
@@ -44,15 +40,14 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildImage() {
-        Artwork awk = tag.getFirstArtwork();
-        BufferedImage image = null;
         try {
-            image = (BufferedImage) awk.getImage();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Artwork awk = tag.getFirstArtwork();
+            BufferedImage image = (BufferedImage) awk.getImage();
+            super.image = SwingFXUtils.toFXImage(image, null);
+        } catch (NullPointerException | IOException exception) {
             super.image = null;
         }
-        super.image = SwingFXUtils.toFXImage(image, null);
+
         return this;
     }
 
@@ -72,34 +67,25 @@ public class MP3Parser extends MusicParser {
     public MusicParser buildAudioStream() {
 
         try {
-            File file = new File(super.filePath);
-            System.out.println(file);
-            AudioFileFormat baseFileFormat = null;
-            AudioFormat baseFormat = null;
-            baseFileFormat = AudioSystem.getAudioFileFormat(file);
-            baseFormat = baseFileFormat.getFormat();
-            AudioFileFormat.Type type = baseFileFormat.getType();
-            float frequency = baseFormat.getSampleRate();
 
+            AudioInputStream mp3InputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat decodedFormat = makeDecodedFormat(mp3InputStream.getFormat());
 
-//            File file = new File(super.filePath);
-//            AudioInputStream in = AudioSystem.getAudioInputStream(file);
-//            AudioFormat baseFormat = in.getFormat();
-//            AudioFormat decodedFormat = new AudioFormat(
-//                AudioFormat.Encoding.PCM_SIGNED,
-//                baseFormat.getSampleRate(),
-//                16,
-//                baseFormat.getChannels(),
-//                baseFormat.getChannels() * 2,
-//                baseFormat.getSampleRate(),
-//                false);
-
-
-            return this;
+            super.audioStream = AudioSystem.getAudioInputStream(decodedFormat, mp3InputStream);
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return this;
+    }
+
+    private AudioFormat makeDecodedFormat(AudioFormat baseFormat) {
+        return new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                               baseFormat.getSampleRate(), 16,
+                               baseFormat.getChannels(),
+                               baseFormat.getChannels() * 2,
+                               baseFormat.getSampleRate(), false);
     }
 }
