@@ -135,6 +135,14 @@ public class MusicPlayer {
         }
     }
 
+    public void setVolumeRatio(float ratio) {
+        FloatControl volumeControl = (FloatControl) playingClip.getControl(FloatControl.Type.MASTER_GAIN);
+
+        float range = volumeControl.getMaximum() - volumeControl.getMinimum();
+        float gain = (range * ratio) + volumeControl.getMinimum();
+        volumeControl.setValue(gain);
+    }
+
     public PlayerMemento createMemento() {
         return new PlayerMemento(playingInputStream, playingClip.getMicrosecondPosition());
     }
