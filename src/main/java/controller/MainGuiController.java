@@ -25,12 +25,17 @@ import model.music.iterator.BackwardDirection;
 import model.music.iterator.ForwardDirection;
 import model.music.iterator.MusicIterator;
 import model.music.iterator.NormalMusicIterator;
+import model.music.state.FullReferenceState;
+import model.music.state.ListReferenceState;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
 import javax.sound.sampled.*;
 
 public class MainGuiController {
+    private FullReferenceState fullReferenceState;
+    private ListReferenceState currentReferenceState;
+
     @FXML
     private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
 
@@ -44,17 +49,24 @@ public class MainGuiController {
 
         musicFiles = FXCollections.observableHashMap();
         musicFiles.addListener(this::handleFileListChanged);
+
+        fullReferenceState = new FullReferenceState(musicFiles);
+        setReferenceState(fullReferenceState);
+    }
+
+    private void setReferenceState(ListReferenceState newState) {
+        currentReferenceState = newState;
     }
 
     private void handleFileListChanged(MapChangeListener.Change<? extends Path, ? extends MusicData> changeArgs) {
+        refreshListViewItems();
+    }
+
+    private void refreshListViewItems() {
         ObservableList<String> listViewItems = musicListView.getItems();
 
         listViewItems.clear();
-        listViewItems.addAll(musicFiles.keySet()
-                                       .stream()
-                                       .map(Path::getFileName)
-                                       .sorted()
-                                       .collect(Collectors.toList()));
+        listViewItems.addAll(currentReferenceState.getSortedFileNames());
     }
 
     public void fullMusicListBtnOnClicked() {
@@ -118,29 +130,25 @@ public class MainGuiController {
     }
 
     private void processMusicFilesForPlaying(String selectedFileName) {
-        List<Map.Entry<Path, MusicData>> sortedMusicFiles
-            = musicFiles.entrySet().stream()
-                                   .sorted(Comparator.comparing(leftPair -> leftPair.getKey().getFileName()))
-                                   .collect(Collectors.toList());
+        Optional<MusicData> selectedMusic
+            = currentReferenceState.getSortedEntries()
+                                   .stream()
+                                   .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+                                   .map(Map.Entry::getValue)
+                                   .findFirst();
 
-        List<MusicData> musicDataList
-            = sortedMusicFiles.stream()
-                              .map(Map.Entry::getValue)
-                              .collect(Collectors.toList());
+        MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
 
-        sortedMusicFiles.stream()
-                        .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
-                        .findFirst()
-                        .ifPresent(entry -> startMusicPlayer(musicDataList, entry.getValue()));
+        if (selectedMusic.isPresent()) {
+            iterator.resetFor(selectedMusic.get());
+            startMusicPlayer(iterator);
+        }
     }
 
-    private void startMusicPlayer(Collection<MusicData> musicDataCollection, MusicData selectedMusicData) {
-        MusicIterator iterator = new NormalMusicIterator(musicDataCollection, new ForwardDirection());
-        iterator.resetFor(selectedMusicData);
-
+    private void startMusicPlayer(MusicIterator musicIterator) {
         musicPlayer.stopPlay();
 
-        musicPlayer.setIterationMode(iterator);
+        musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
     }
 }
