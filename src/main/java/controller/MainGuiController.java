@@ -27,13 +27,15 @@ import model.music.iterator.MusicIterator;
 import model.music.iterator.NormalMusicIterator;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
+import model.music.state.RecentPlayedReferenceState;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
 import javax.sound.sampled.*;
 
 public class MainGuiController {
-    private FullReferenceState fullReferenceState;
+    private ListReferenceState fullReferenceState;
+    private ListReferenceState recentPlayedReferenceState;
     private ListReferenceState currentReferenceState;
 
     @FXML
@@ -51,6 +53,8 @@ public class MainGuiController {
         musicFiles.addListener(this::handleFileListChanged);
 
         fullReferenceState = new FullReferenceState(musicFiles);
+        recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
+
         setReferenceState(fullReferenceState);
     }
 
@@ -70,7 +74,9 @@ public class MainGuiController {
     }
 
     public void fullMusicListBtnOnClicked() {
-        fullMusicListBtn.setText("full Clicked");
+        setReferenceState(fullReferenceState);
+
+        refreshListViewItems();
     }
 
     public void favoriteMusicListBtnOnClicked() {
@@ -78,7 +84,9 @@ public class MainGuiController {
     }
 
     public void recentPlayedMusicListBtnOnClicked() {
-        recentPlayedMusicListBtn.setText("recent Clicked");
+        setReferenceState(recentPlayedReferenceState);
+
+        refreshListViewItems();
     }
 
     @FXML

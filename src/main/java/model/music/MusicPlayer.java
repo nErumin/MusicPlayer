@@ -92,9 +92,6 @@ public class MusicPlayer {
                 microseconds : playingClip.getMicrosecondLength();
 
             playingClip.setMicrosecondPosition(microseconds);
-
-            System.out.println("Current: " + microseconds + ", " + playingClip.getFramePosition());
-            System.out.println("Target: " + playingClip.getMicrosecondLength() + ", " + playingClip.getFrameLength());
     }
 
     private void handleClipFinished(LineEvent lineEvent) {
