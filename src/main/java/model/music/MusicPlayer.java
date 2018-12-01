@@ -5,6 +5,8 @@ import model.music.iterator.NoneMusicIterator;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class MusicPlayer {
@@ -38,7 +40,10 @@ public class MusicPlayer {
     public synchronized void startPlay() {
         stopPlay();
 
-        playingInputStream = iterationMode.getCurrentMusicData().getAudioStream();
+        MusicData currentPlayedMusic = getCurrentPlayedMusic();
+
+        currentPlayedMusic.setRecentPlayedDate(Date.from(ZonedDateTime.now().toInstant()));
+        playingInputStream = currentPlayedMusic.getAudioStream();
 
         try {
             playingClip.addLineListener(lineHandler);
@@ -128,5 +133,9 @@ public class MusicPlayer {
 
             playFromMicroSeconds(memento.getProgressedMilliSeconds());
         }
+    }
+
+    public MusicData getCurrentPlayedMusic() {
+        return iterationMode.getCurrentMusicData();
     }
 }
