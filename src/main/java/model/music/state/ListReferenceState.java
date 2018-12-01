@@ -31,11 +31,10 @@ public abstract class ListReferenceState {
     }
 
     public Collection<String> getSortedFileNames() {
-        return getEntries().stream()
-                           .map(Map.Entry::getKey)
-                           .map(Path::getFileName)
-                           .sorted()
-                           .collect(Collectors.toList());
+        return getSortedEntries().stream()
+                                 .map(Map.Entry::getKey)
+                                 .map(Path::getFileName)
+                                 .collect(Collectors.toList());
     }
 
     public abstract Set<Map.Entry<Path, MusicData>> getEntries();
