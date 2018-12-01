@@ -35,7 +35,7 @@ public class MusicPlayer {
         this.iterationMode = iterationMode;
     }
 
-    public void startPlay() {
+    public synchronized void startPlay() {
         stopPlay();
 
         playingInputStream = iterationMode.getCurrentMusicData().getAudioStream();
@@ -45,6 +45,8 @@ public class MusicPlayer {
             playingClip.open(playingInputStream);
             playingClip.start();
         } catch (LineUnavailableException | IOException | IllegalStateException exception) {
+            exception.printStackTrace();
+
             stopPlay();
         }
     }
