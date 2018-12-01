@@ -17,15 +17,6 @@ public class FullReferenceState extends ListReferenceState {
     }
 
     @Override
-    public Collection<String> getSortedFileNames() {
-        return getEntries().stream()
-                           .map(Map.Entry::getKey)
-                           .map(Path::getFileName)
-                           .sorted()
-                           .collect(Collectors.toList());
-    }
-
-    @Override
     public Set<Map.Entry<Path, MusicData>> getEntries() {
         return getMusicFiles().entrySet();
     }

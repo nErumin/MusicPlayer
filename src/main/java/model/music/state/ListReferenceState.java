@@ -30,7 +30,14 @@ public abstract class ListReferenceState {
                                  .collect(Collectors.toList());
     }
 
-    public abstract Collection<String> getSortedFileNames();
+    public Collection<String> getSortedFileNames() {
+        return getEntries().stream()
+                           .map(Map.Entry::getKey)
+                           .map(Path::getFileName)
+                           .sorted()
+                           .collect(Collectors.toList());
+    }
+
     public abstract Set<Map.Entry<Path, MusicData>> getEntries();
     public abstract MusicIterator makeIterator(Collection<MusicData> musicDataCollection);
 }
