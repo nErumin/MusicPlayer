@@ -82,6 +82,8 @@ public class MainGuiController {
     }
 
     private void refreshListViewItems() {
+        musicPlayer.stopPlay();
+
         ObservableList<String> listViewItems = musicListView.getItems();
 
         listViewItems.clear();
