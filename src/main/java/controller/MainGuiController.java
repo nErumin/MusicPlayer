@@ -26,6 +26,7 @@ import model.music.iterator.BackwardDirection;
 import model.music.iterator.ForwardDirection;
 import model.music.iterator.MusicIterator;
 import model.music.iterator.NormalMusicIterator;
+import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
@@ -37,10 +38,11 @@ import javax.sound.sampled.*;
 public class MainGuiController {
     private ListReferenceState fullReferenceState;
     private ListReferenceState recentPlayedReferenceState;
+    private ListReferenceState favoriteReferenceState;
     private ListReferenceState currentReferenceState;
 
     @FXML
-    private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
+    private Button favoriteMusicListBtn;
 
     @FXML
     private ListView<String> musicListView;
@@ -55,6 +57,7 @@ public class MainGuiController {
 
         fullReferenceState = new FullReferenceState(musicFiles);
         recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
+        favoriteReferenceState = new FavoriteReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
 
@@ -92,7 +95,9 @@ public class MainGuiController {
     }
 
     public void favoriteMusicListBtnOnClicked() {
-        favoriteMusicListBtn.setText("favorite Clicked");
+        setReferenceState(favoriteReferenceState);
+
+        refreshListViewItems();
     }
 
     public void recentPlayedMusicListBtnOnClicked() {
