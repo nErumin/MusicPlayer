@@ -25,7 +25,7 @@ public class RecentPlayedReferenceState extends ListReferenceState {
     @Override
     public List<Map.Entry<Path, MusicData>> getSortedEntries() {
         return getEntries().stream()
-                           .sorted(Comparator.comparing(leftEntry -> leftEntry.getValue().getRecentPlayedDate()))
+                           .sorted((leftEntry, rightEntry) -> rightEntry.getValue().getRecentPlayedDate().compareTo(leftEntry.getValue().getRecentPlayedDate()))
                            .collect(Collectors.toList());
     }
 

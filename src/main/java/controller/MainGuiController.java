@@ -68,8 +68,6 @@ public class MainGuiController {
         if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
             musicData.setRecentPlayedDate(currentDate);
-
-            System.out.println("Recorded : " + currentDate);
         }
     }
 
