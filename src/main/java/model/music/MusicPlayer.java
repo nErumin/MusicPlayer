@@ -5,14 +5,17 @@ import model.music.iterator.NoneMusicIterator;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class MusicPlayer {
     private MusicIterator iterationMode;
     private Clip playingClip;
     private AudioInputStream playingInputStream;
+    private List<Consumer<MusicData>> musicStartingListeners;
+    private List<Consumer<MusicData>> musicEndingListeners;
 
     private LineListener lineHandler = this::handleClipFinished;
 
@@ -24,13 +27,24 @@ public class MusicPlayer {
         setIterationMode(iterationMode);
 
         playingClip = AudioSystem.getClip();
+        musicStartingListeners = new ArrayList<>();
+        musicEndingListeners = new ArrayList<>();
     }
 
-    private Clip makeNewClip() throws LineUnavailableException {
-        Clip newClip = AudioSystem.getClip();
-        newClip.addLineListener(lineHandler);
+    public void registerStartListener(Consumer<MusicData> listener) {
+        musicStartingListeners.add(listener);
+    }
 
-        return newClip;
+    public void UnregisterStartListener(Consumer<MusicData> listener) {
+        musicStartingListeners.remove(listener);
+    }
+
+    public void registerEndListener(Consumer<MusicData> listener) {
+        musicEndingListeners.add(listener);
+    }
+
+    public void UnregisterEndListener(Consumer<MusicData> listener) {
+        musicEndingListeners.remove(listener);
     }
 
     public void setIterationMode(MusicIterator iterationMode) {
@@ -41,9 +55,9 @@ public class MusicPlayer {
         stopPlay();
 
         MusicData currentPlayedMusic = getCurrentPlayedMusic();
-
-        currentPlayedMusic.setRecentPlayedDate(Date.from(ZonedDateTime.now().toInstant()));
         playingInputStream = currentPlayedMusic.getAudioStream();
+
+        musicStartingListeners.forEach(consumer -> consumer.accept(currentPlayedMusic));
 
         try {
             playingClip.addLineListener(lineHandler);
@@ -97,6 +111,8 @@ public class MusicPlayer {
     private void handleClipFinished(LineEvent lineEvent) {
         if (lineEvent.getType() == LineEvent.Type.STOP && isPlayingFinished()) {
             playingClip.removeLineListener(lineHandler);
+
+            musicEndingListeners.forEach(consumer -> consumer.accept(getCurrentPlayedMusic()));
             playNextMusic();
         } else if (lineEvent.getType() == LineEvent.Type.CLOSE) {
             playingClip.removeLineListener(lineHandler);

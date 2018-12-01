@@ -16,6 +16,7 @@ import model.music.MusicProxy;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,17 @@ public class MainGuiController {
         recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
+
+        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+    }
+
+    private void handleMusicPlayStarting(MusicData musicData) {
+        if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
+            Date currentDate = Date.from(ZonedDateTime.now().toInstant());
+            musicData.setRecentPlayedDate(currentDate);
+
+            System.out.println("Recorded : " + currentDate);
+        }
     }
 
     private void setReferenceState(ListReferenceState newState) {
