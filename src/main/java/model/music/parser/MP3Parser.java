@@ -34,9 +34,13 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildTitle() {
-        super.title = tag.getFirst(FieldKey.TITLE);
+        if(tag!=null)
+            super.title = tag.getFirst(FieldKey.TITLE);
+
         return this;
     }
+
+
 
     @Override
     public MusicParser buildImage() {
@@ -53,19 +57,24 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildArtist() {
-        super.artist = tag.getFirst(FieldKey.ARTIST);
+        if(tag!=null)
+            super.artist = tag.getFirst(FieldKey.ARTIST);
         return this;
     }
 
     @Override
     public MusicParser buildAlbumName() {
-        super.albumName = tag.getFirst(FieldKey.ALBUM);
+
+        if(tag!=null)
+            super.albumName = tag.getFirst(FieldKey.ALBUM);
         return this;
     }
 
     @Override
     public MusicParser buildAudioStream() {
+
         try {
+
             AudioInputStream mp3InputStream = AudioSystem.getAudioInputStream(file);
             AudioFormat decodedFormat = makeDecodedFormat(mp3InputStream.getFormat());
 
@@ -73,7 +82,6 @@ public class MP3Parser extends MusicParser {
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            super.audioStream = null;
             e.printStackTrace();
         }
 

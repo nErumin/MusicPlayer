@@ -13,6 +13,7 @@ public abstract class MusicParser {
     protected Image image;
     protected AudioInputStream audioStream;
 
+
     abstract public MusicParser buildTitle();
 
     abstract public MusicParser buildImage();
