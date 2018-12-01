@@ -5,11 +5,14 @@ import model.music.iterator.NoneMusicIterator;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class MusicPlayer {
     private MusicIterator iterationMode;
     private Clip playingClip;
     private AudioInputStream playingInputStream;
+
+    private LineListener lineHandler = this::handleClipFinished;
 
     public MusicPlayer() throws LineUnavailableException {
         this(new NoneMusicIterator());
@@ -18,11 +21,14 @@ public class MusicPlayer {
     public MusicPlayer(MusicIterator iterationMode) throws LineUnavailableException {
         setIterationMode(iterationMode);
 
-        playingClip = makeNewClip();
+        playingClip = AudioSystem.getClip();
     }
 
     private Clip makeNewClip() throws LineUnavailableException {
-        return AudioSystem.getClip();
+        Clip newClip = AudioSystem.getClip();
+        newClip.addLineListener(lineHandler);
+
+        return newClip;
     }
 
     public void setIterationMode(MusicIterator iterationMode) {
@@ -35,9 +41,7 @@ public class MusicPlayer {
         playingInputStream = iterationMode.getCurrentMusicData().getAudioStream();
 
         try {
-            playingClip = makeNewClip();
-            playingClip.addLineListener(this::handleClipFinished);
-
+            playingClip.addLineListener(lineHandler);
             playingClip.open(playingInputStream);
             playingClip.start();
         } catch (LineUnavailableException | IOException | IllegalStateException exception) {
@@ -58,17 +62,47 @@ public class MusicPlayer {
     }
 
     public void stopPlay() {
+        playingClip.removeLineListener(lineHandler);
+
         playingClip.close();
     }
 
+    public void skipSeconds(int seconds) {
+        long milliseconds = TimeUnit.SECONDS.toMicros(seconds);
+        long currentProgressedMilliSeconds = playingClip.getMicrosecondPosition();
+
+        playFromMicroSeconds(currentProgressedMilliSeconds + milliseconds);
+    }
+
+    public void playFromLengthRatio(double ratio) {
+        long milliPosition = (long) (playingClip.getMicrosecondLength() * ratio);
+
+        playFromMicroSeconds(milliPosition);
+    }
+
+    private void playFromMicroSeconds(long microseconds) {
+            microseconds = microseconds < playingClip.getMicrosecondLength() ?
+                microseconds : playingClip.getMicrosecondLength();
+
+            playingClip.setMicrosecondPosition(microseconds);
+
+            System.out.println("Current: " + microseconds + ", " + playingClip.getFramePosition());
+            System.out.println("Target: " + playingClip.getMicrosecondLength() + ", " + playingClip.getFrameLength());
+    }
+
     private void handleClipFinished(LineEvent lineEvent) {
-        playingClip.removeLineListener(this::handleClipFinished);
-
-        if (lineEvent.getType() == LineEvent.Type.STOP &&
-            lineEvent.getFramePosition() == playingInputStream.getFrameLength()) {
-
+        if (lineEvent.getType() == LineEvent.Type.STOP && isPlayingFinished()) {
+            playingClip.removeLineListener(lineHandler);
             playNextMusic();
+        } else if (lineEvent.getType() == LineEvent.Type.CLOSE) {
+            playingClip.removeLineListener(lineHandler);
+        } else {
+            playingClip.start();
         }
+    }
+
+    private boolean isPlayingFinished() {
+        return playingClip.getMicrosecondPosition() >= playingClip.getMicrosecondLength();
     }
 
     private void playNextMusic() {
@@ -90,9 +124,7 @@ public class MusicPlayer {
             playingInputStream != null &&
             memento.getPlayingStream().equals(playingInputStream)) {
 
-            playingClip.stop();
-            playingClip.setMicrosecondPosition(memento.getProgressedMilliSeconds());
-            playingClip.start();
+            playFromMicroSeconds(memento.getProgressedMilliSeconds());
         }
     }
 }
