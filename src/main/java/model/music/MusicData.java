@@ -3,12 +3,18 @@ package model.music;
 import javafx.scene.image.Image;
 
 import javax.sound.sampled.AudioInputStream;
+import java.util.Date;
 
 public interface MusicData {
-    public Image getImage();
-    public String getTitle();
-    public String getAlbumName();
-    public String getArtist();
-    public AudioInputStream getAudioStream();
+    Image getImage();
+    String getTitle();
+    String getAlbumName();
+    String getArtist();
+    AudioInputStream getAudioStream();
+
+    boolean isFavorite();
+    void setFavorite(boolean isFavorite);
+    Date getRecentPlayedDate();
+    void setRecentPlayedDate(Date recentPlayedDate);
 }
 

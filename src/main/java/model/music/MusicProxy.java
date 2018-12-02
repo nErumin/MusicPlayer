@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import model.music.parser.ParserCreator;
 
 import javax.sound.sampled.AudioInputStream;
+import java.util.Date;
 
 public class MusicProxy implements MusicData {
     private Music music;
@@ -44,6 +45,34 @@ public class MusicProxy implements MusicData {
         nullCheck();
 
         return music.getImage();
+    }
+
+    @Override
+    public boolean isFavorite() {
+        nullCheck();
+
+        return music.isFavorite();
+    }
+
+    @Override
+    public void setFavorite(boolean isFavorite) {
+        nullCheck();
+
+        music.setFavorite(isFavorite);
+    }
+
+    @Override
+    public Date getRecentPlayedDate() {
+        nullCheck();
+
+        return music.getRecentPlayedDate();
+    }
+
+    @Override
+    public void setRecentPlayedDate(Date recentPlayedDate) {
+        nullCheck();
+
+        music.setRecentPlayedDate(recentPlayedDate);
     }
 
     private void nullCheck() {
