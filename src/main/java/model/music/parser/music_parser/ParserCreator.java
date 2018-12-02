@@ -1,5 +1,6 @@
-package model.music.parser;
+package model.music.parser.music_parser;
 
+import model.music.parser.MusicParser;
 import org.apache.commons.io.FilenameUtils;
 import utility.ReflectionUtility;
 

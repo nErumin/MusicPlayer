@@ -1,7 +1,7 @@
 package model.music;
 
 import javafx.scene.image.Image;
-import model.music.parser.ParserCreator;
+import model.music.parser.music_parser.ParserCreator;
 
 import javax.sound.sampled.AudioInputStream;
 import java.util.Date;
@@ -41,6 +41,13 @@ public class MusicProxy implements MusicData {
         return music.getAudioStream();
     }
 
+    @Override
+    public Lyric getLyric() {
+        nullCheck();
+
+        return null;
+    }
+
     public Image getImage() {
         nullCheck();
 
@@ -73,6 +80,13 @@ public class MusicProxy implements MusicData {
         nullCheck();
 
         music.setRecentPlayedDate(recentPlayedDate);
+    }
+
+    @Override
+    public boolean isLyric() {
+        nullCheck();
+
+        return false;
     }
 
     private void nullCheck() {

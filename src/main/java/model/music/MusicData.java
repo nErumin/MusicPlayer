@@ -11,10 +11,12 @@ public interface MusicData {
     String getAlbumName();
     String getArtist();
     AudioInputStream getAudioStream();
+    Lyric getLyric();
 
     boolean isFavorite();
     void setFavorite(boolean isFavorite);
     Date getRecentPlayedDate();
     void setRecentPlayedDate(Date recentPlayedDate);
+    boolean isLyric();
 }
 
