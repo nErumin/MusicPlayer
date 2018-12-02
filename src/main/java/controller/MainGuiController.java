@@ -25,6 +25,7 @@ import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
+import thread.LyricPrintSystem;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -208,6 +209,10 @@ public class MainGuiController {
 
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
+
+        LyricPrintSystem lyricPrintSystem = LyricPrintSystem.getInstance();
+        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+        lyricPrintSystem.execute();
     }
 
     @FXML

@@ -1,6 +1,7 @@
 package model.music;
 
 import javafx.scene.image.Image;
+import model.music.parser.lyric_parser.LyricParser;
 import model.music.parser.music_parser.ParserCreator;
 
 import javax.sound.sampled.AudioInputStream;
@@ -10,6 +11,7 @@ public class MusicProxy implements MusicData {
     private Music music;
     private Lyric lyric;
     private String filePath;
+    private boolean isLyric = false;
 
     public MusicProxy(String filePath) {
         this.filePath = filePath;
@@ -42,9 +44,9 @@ public class MusicProxy implements MusicData {
     @Override
     public Lyric getLyric() {
         if(isLyric()) {
-            return null;
+            return lyric;
         }
-        return lyric;
+        return null;
     }
 
     public Image getImage() {
@@ -85,7 +87,7 @@ public class MusicProxy implements MusicData {
     public boolean isLyric() {
         nullCheck();
 
-        return false;
+        return isLyric;
     }
 
     private void nullCheck() {
@@ -100,7 +102,12 @@ public class MusicProxy implements MusicData {
                                       .build();
         }
         if(lyric == null){
-            //this.lyric = new LyricParser(filePath).getLyric();
+            try {
+                this.lyric = new LyricParser(filePath).getLyric();
+                this.isLyric = true;
+            } catch (NullPointerException e) {
+                return;
+            }
             //가사가 parsing 안되어있으면 parsing해주고, 가사 파일 자체가 없으면 ???
         }
 
