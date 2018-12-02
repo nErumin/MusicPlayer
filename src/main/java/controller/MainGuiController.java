@@ -25,7 +25,6 @@ import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
-import thread.LyricPrintSystem;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -47,7 +46,8 @@ public class MainGuiController {
 
     @FXML
     private Button favoriteMusicListBtn, stopBtn, playBtn, seekPreviousBtn, seekNextBtn, loopBtn, favoriteBtn;
-
+    @FXML
+    private ImageView playImageView, favoriteImageView;
     @FXML
     private Slider musicProgressBar, musicVolumeVar;
     @FXML
@@ -55,7 +55,8 @@ public class MainGuiController {
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
-
+    private boolean isPause = false;
+    private boolean isFavorite = false;
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -70,7 +71,25 @@ public class MainGuiController {
         setReferenceState(fullReferenceState);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
-        new LyricPrintSystem(musicPlayer);
+        musicPlayer.registerStartListener(this::handlePlayBtn);
+        musicPlayer.registerStartListener(this::handleFavoriteBtn);
+    }
+
+    private void handlePlayBtn(MusicData musicData){
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+        playImageView.setImage(image);
+    }
+    private void handleFavoriteBtn(MusicData musicData){
+        if(musicData.isFavorite()){
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+            favoriteImageView.setImage(image);
+
+        }
+        else{
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
+            favoriteImageView.setImage(image);
+
+        }
     }
 
     private void handleMusicPlayStarting(MusicData musicData) {
@@ -171,10 +190,10 @@ public class MainGuiController {
     private void processMusicFilesForPlaying(String selectedFileName) {
         Optional<MusicData> selectedMusic
             = currentReferenceState.getSortedEntries()
-                                                    .stream()
-                                                    .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
-                                                    .map(Map.Entry::getValue)
-                                                    .findFirst();
+            .stream()
+            .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+            .map(Map.Entry::getValue)
+            .findFirst();
 
         MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
 
@@ -193,42 +212,40 @@ public class MainGuiController {
 
     @FXML
     private void clickStopBtn(){
-        System.out.println("click stop next btn");
+        musicPlayer.stopPlay();
     }
     @FXML
     private void clickPlayBtn(){
-        boolean play = false;
-        if(play) {
+        if(musicPlayer.isPaused()) {
+            musicPlayer.resumePlay();
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
-            ((ImageView) favoriteBtn.getScene().lookup("#playImageView")).setImage(image);
-            play = false;
+            playImageView.setImage(image);
         }
         else{
+            musicPlayer.pausePlay();
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
-            ((ImageView) favoriteBtn.getScene().lookup("#playImageView")).setImage(image);
-            play = true;
+            playImageView.setImage(image);
         }
     }
     @FXML
     private void clickSeekNextBtn(){
-        System.out.println("click seek next btn");
+        musicPlayer.skipSeconds(10);
     }
     @FXML
     private void clickSeekPreviousBtn(){
-        System.out.println("click seek previous btn");
+        musicPlayer.skipSeconds(-10);
     }
     @FXML
     private void clickFavoriteBtn(){
-        boolean favorite = false;
-        if(favorite) {
+        if(musicPlayer.getCurrentPlayedMusic().isFavorite()) {
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
-            ((ImageView) favoriteBtn.getScene().lookup("#favoriteImageView")).setImage(image);
-            favorite = false;
+            favoriteImageView.setImage(image);
+            musicPlayer.getCurrentPlayedMusic().setFavorite(false);
         }
         else{
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
-            ((ImageView) favoriteBtn.getScene().lookup("#favoriteImageView")).setImage(image);
-            favorite = true;
+            favoriteImageView.setImage(image);
+            musicPlayer.getCurrentPlayedMusic().setFavorite(true);
         }
     }
     @FXML
