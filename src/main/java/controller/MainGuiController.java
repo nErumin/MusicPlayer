@@ -59,6 +59,8 @@ public class MainGuiController {
     private boolean isPause = false;
     private boolean isFavorite = false;
 
+    LyricPrintSystem lyricPrintSystem;
+
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
 
@@ -74,6 +76,7 @@ public class MainGuiController {
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
         musicPlayer.registerStartListener(this::handlePlayBtn);
         musicPlayer.registerStartListener(this::handleFavoriteBtn);
+        musicPlayer.registerStartListener(this::handleLyricSystem);
     }
 
     private void handlePlayBtn(MusicData musicData){
@@ -84,15 +87,20 @@ public class MainGuiController {
         if(musicData.isFavorite()){
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
             favoriteImageView.setImage(image);
-
         }
         else{
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
             favoriteImageView.setImage(image);
-
         }
     }
 
+    private void handleLyricSystem(MusicData musicData){
+        System.out.println("lyric system played");
+        lyricPrintSystem = LyricPrintSystem.getInstance();
+        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+        lyricPrintSystem.setScene(musicListView.getScene());
+        lyricPrintSystem.execute();
+    }
     private void handleMusicPlayStarting(MusicData musicData) {
         if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
@@ -209,10 +217,6 @@ public class MainGuiController {
 
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
-
-        LyricPrintSystem lyricPrintSystem = LyricPrintSystem.getInstance();
-        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
-        lyricPrintSystem.execute();
     }
 
     @FXML
