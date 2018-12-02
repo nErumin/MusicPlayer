@@ -46,18 +46,16 @@ public class MainGuiController {
 
 
     @FXML
-    private Button favoriteMusicListBtn, stopBtn, playBtn, seekPreviousBtn, seekNextBtn, loopBtn, favoriteBtn;
+    private Button favoriteMusicListBtn;
     @FXML
     private ImageView playImageView, favoriteImageView;
     @FXML
-    private Slider musicProgressBar, musicVolumeVar;
+    private Slider musicProgressBar, musicVolumeBar;
     @FXML
     private ListView<String> musicListView;
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
-    private boolean isPause = false;
-    private boolean isFavorite = false;
 
     LyricPrintSystem lyricPrintSystem;
 
@@ -249,19 +247,28 @@ public class MainGuiController {
     }
     @FXML
     private void clickFavoriteBtn(){
-        if(musicPlayer.getCurrentPlayedMusic().isFavorite()) {
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
-            favoriteImageView.setImage(image);
-            musicPlayer.getCurrentPlayedMusic().setFavorite(false);
+        if(musicPlayer.getCurrentPlayedMusic() == null){
+            System.out.println("Plz set music");
         }
-        else{
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
-            favoriteImageView.setImage(image);
-            musicPlayer.getCurrentPlayedMusic().setFavorite(true);
+        else {
+            if (musicPlayer.getCurrentPlayedMusic().isFavorite()) {
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
+                favoriteImageView.setImage(image);
+                musicPlayer.getCurrentPlayedMusic().setFavorite(false);
+            } else {
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+                favoriteImageView.setImage(image);
+                musicPlayer.getCurrentPlayedMusic().setFavorite(true);
+            }
         }
     }
     @FXML
     private void clickLoopBtn(){
         System.out.println("click loop btn");
+    }
+
+    @FXML
+    private void doVolumeSlider(){
+        System.out.println(musicVolumeBar.getValue());
     }
 }
