@@ -1,4 +1,4 @@
-package model.music.parser;
+package model.music.parser.music_parser;
 
 import javafx.scene.image.Image;
 import model.music.Music;

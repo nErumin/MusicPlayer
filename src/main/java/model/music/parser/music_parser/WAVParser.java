@@ -1,5 +1,4 @@
-package model.music.parser;
-
+package model.music.parser.music_parser;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;

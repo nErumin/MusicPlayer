@@ -1,7 +1,6 @@
-package model.music.parser;
+package model.music.parser.music_parser;
 
 import javafx.embed.swing.SwingFXUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;

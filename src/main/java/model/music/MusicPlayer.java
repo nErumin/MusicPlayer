@@ -70,6 +70,14 @@ public class MusicPlayer {
         }
     }
 
+    public Clip getPlayingClip(){
+        try{
+            return playingClip;
+        } catch(NullPointerException e){
+            return null;
+        }
+    }
+
     public void pausePlay() {
         if (playingClip.isRunning()) {
             playingClip.stop();
@@ -152,7 +160,7 @@ public class MusicPlayer {
             playingInputStream != null &&
             memento.getPlayingStream().equals(playingInputStream)) {
 
-            playFromMicroSeconds(memento.getProgressedMilliSeconds());
+            playFromMicroSeconds(memento.getProgressedMicroSeconds());
         }
     }
 
