@@ -10,65 +10,99 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import model.Path;
 import model.music.MusicData;
+import model.music.MusicPlayer;
 import model.music.MusicProxy;
+import model.music.iterator.MusicIterator;
+import model.music.state.FavoriteReferenceState;
+import model.music.state.FullReferenceState;
+import model.music.state.ListReferenceState;
+import model.music.state.RecentPlayedReferenceState;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.Map;
+import java.util.Optional;
 
 public class MainGuiController {
-    @FXML
-    private Button favoriteMusicListBtn, fullMusicListBtn, recentPlayedMusicListBtn;
+    private ListReferenceState fullReferenceState;
+    private ListReferenceState recentPlayedReferenceState;
+    private ListReferenceState favoriteReferenceState;
+    private ListReferenceState currentReferenceState;
 
     @FXML
-    private ImageView musicImage;
+    private Button favoriteMusicListBtn;
 
     @FXML
     private ListView<String> musicListView;
     private ObservableMap<Path, MusicData> musicFiles;
+    private MusicPlayer musicPlayer;
 
-    public void initialize() {
+    public void initialize() throws LineUnavailableException {
+        musicPlayer = new MusicPlayer();
+
         musicFiles = FXCollections.observableHashMap();
-
         musicFiles.addListener(this::handleFileListChanged);
+
+        fullReferenceState = new FullReferenceState(musicFiles);
+        recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
+        favoriteReferenceState = new FavoriteReferenceState(musicFiles);
+
+        setReferenceState(fullReferenceState);
+
+        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+    }
+
+    private void handleMusicPlayStarting(MusicData musicData) {
+        if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
+            Date currentDate = Date.from(ZonedDateTime.now().toInstant());
+            musicData.setRecentPlayedDate(currentDate);
+        }
+    }
+
+    private void setReferenceState(ListReferenceState newState) {
+        currentReferenceState = newState;
     }
 
     private void handleFileListChanged(MapChangeListener.Change<? extends Path, ? extends MusicData> changeArgs) {
+        refreshListViewItems();
+    }
+
+    private void refreshListViewItems() {
+        musicPlayer.stopPlay();
+
         ObservableList<String> listViewItems = musicListView.getItems();
 
         listViewItems.clear();
-        listViewItems.addAll(musicFiles.keySet()
-                                       .stream()
-                                       .map(Path::getFileName)
-                                       .sorted()
-                                       .collect(Collectors.toList()));
+        listViewItems.addAll(currentReferenceState.getSortedFileNames());
     }
 
-    @FXML
-    private void fullMusicListBtnOnClicked() {
-        fullMusicListBtn.setText("full Clicked");
+    public void fullMusicListBtnOnClicked() {
+        setReferenceState(fullReferenceState);
+
+        refreshListViewItems();
     }
 
-    @FXML
-    private void favoriteMusicListBtnOnClicked() {
-        favoriteMusicListBtn.setText("favorite Clicked");
+    public void favoriteMusicListBtnOnClicked() {
+        setReferenceState(favoriteReferenceState);
+
+        refreshListViewItems();
     }
 
-    @FXML
-    private void recentPlayedMusicListBtnOnClicked() {
-        recentPlayedMusicListBtn.setText("recent Clicked");
+    public void recentPlayedMusicListBtnOnClicked() {
+        setReferenceState(recentPlayedReferenceState);
+
+        refreshListViewItems();
     }
 
     @FXML
@@ -81,7 +115,10 @@ public class MainGuiController {
         );
 
         musicFiles.clear();
-        fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+
+        if (chosenDirectory != null) {
+            fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+        }
     }
 
     private void fillMusicFileListView(Iterable<String> filePaths) {
@@ -93,16 +130,14 @@ public class MainGuiController {
         }
     }
 
-    @FXML
-    private void clickAlarmMenuItem() {
+    public void clickAlarmMenuItem() {
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
         alarmSettingGui.makeJustOneWindow(stage);
         alarmSettingGui.showAndWait();
     }
 
-    @FXML
-    private void clickShutdownMenuItem(){
+    public void clickShutdownMenuItem(){
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
         shutdownSettingGui.makeJustOneWindow(stage);
@@ -110,32 +145,34 @@ public class MainGuiController {
     }
 
     @FXML
-    private void handleMusicListItemClicked() {
-        String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
+    private void handleMusicListItemClicked(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            String selectedFileName = musicListView.getSelectionModel().getSelectedItem();
 
-        playMusic(selectedFileName);
-
-
-    }
-
-    private void playMusic(String selectedFileName) {
-        musicFiles.forEach(((path, musicData) -> {
-            try {
-                if (path.getFileName().equals(selectedFileName)) {
-                    startClip(musicData.getAudioStream());
-                    musicImage.setImage(musicData.getImage());
-                }
-            } catch (IOException | LineUnavailableException exception) {
-                exception.printStackTrace();
-            }
-        }));
-    }
-
-    private void startClip(AudioInputStream audioStream) throws LineUnavailableException, IOException {
-        if (audioStream != null) {
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
+            processMusicFilesForPlaying(selectedFileName);
         }
+    }
+
+    private void processMusicFilesForPlaying(String selectedFileName) {
+        Optional<MusicData> selectedMusic
+            = currentReferenceState.getSortedEntries()
+            .stream()
+            .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+            .map(Map.Entry::getValue)
+            .findFirst();
+
+        MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
+
+        if (selectedMusic.isPresent()) {
+            iterator.resetFor(selectedMusic.get());
+            startMusicPlayer(iterator);
+        }
+    }
+
+    private void startMusicPlayer(MusicIterator musicIterator) {
+        musicPlayer.stopPlay();
+
+        musicPlayer.setIterationMode(musicIterator);
+        musicPlayer.startPlay();
     }
 }
