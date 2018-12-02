@@ -10,27 +10,38 @@ import javax.swing.*;
 import static java.lang.Thread.sleep;
 
 public class LyricPrintSystem  extends SwingWorker<Void, Void> {
+    private volatile static LyricPrintSystem uniqueInstance;
     MusicData currentMusicData;
     MusicPlayer currentMusicPlayer;
     Lyric currentMusicLyric;
     long currentMusicTime;
     String lyricPart;
 
-    public LyricPrintSystem(MusicPlayer currentMusicPlayer){
-        this.currentMusicPlayer = currentMusicPlayer;
+    public static LyricPrintSystem getInstance(){
+        if(uniqueInstance == null){
+            synchronized(LyricPrintSystem.class){
+                if(uniqueInstance == null){
+                    uniqueInstance = new LyricPrintSystem();
+                }
+            }
+        }
+        return uniqueInstance;
+    }
+
+    public LyricPrintSystem(){
     }
 
     @Override
     protected Void doInBackground() throws Exception {
-
+        long[][] currentLyricTime;
         while(true){
-            currentMusicData = currentMusicPlayer.getCurrentPlayedMusic();
+            currentMusicData = this.currentMusicPlayer.getCurrentPlayedMusic();
             try {
                 currentMusicLyric = currentMusicData.getLyric();
             }catch (NullPointerException e){
                 continue;
             }
-            long[][] currentLyricTime = currentMusicLyric.getTime();
+            currentLyricTime = currentMusicLyric.getTime();
             String[] currentLyricString = currentMusicLyric.getLrc();
             Clip currentClip = currentMusicPlayer.getPlayingClip();
             int start = 0,j = 1;
@@ -52,12 +63,15 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
             lyricPart = currentLyricString[start];
 
             System.out.println(lyricPart);
-//            long termEnd,termStart;
-//            termEnd = currentMusicLyric.getMicroTime(currentLyricTime[start+1]);
-//            termStart = currentMusicLyric.getMicroTime(currentLyricTime[start]);
-//            System.out.println(termStart +"/"+ termEnd);
-//            sleep((termEnd-termStart)/1000);
+            long termEnd,termStart;
+            termEnd = currentMusicLyric.getMicroTime(currentLyricTime[start+1]);
+            termStart = currentMusicLyric.getMicroTime(currentLyricTime[start]);
+//            System.out.println(termStart +"/"+ termEnd+"/start = "+start);
+            sleep((termEnd-termStart)/1000);
 
         }
+    }
+    public void setCurrentMusicPlayer(MusicPlayer currentMusicPlayer){
+        this.currentMusicPlayer = currentMusicPlayer;
     }
 }

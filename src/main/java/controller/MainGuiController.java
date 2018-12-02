@@ -190,7 +190,9 @@ public class MainGuiController {
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
 
-        new LyricPrintSystem(musicPlayer).execute();
+        LyricPrintSystem lyricPrintSystem = LyricPrintSystem.getInstance();
+        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+        lyricPrintSystem.execute();
     }
 
     @FXML

@@ -12,6 +12,7 @@ public class MusicProxy implements MusicData {
     private Music music;
     private Lyric lyric;
     private String filePath;
+    private boolean isLyric = false;
 
     public MusicProxy(String filePath) {
         this.filePath = filePath;
@@ -44,9 +45,9 @@ public class MusicProxy implements MusicData {
     @Override
     public Lyric getLyric() {
         if(isLyric()) {
-            return null;
+            return lyric;
         }
-        return lyric;
+        return null;
     }
 
     public Image getImage() {
@@ -87,7 +88,7 @@ public class MusicProxy implements MusicData {
     public boolean isLyric() {
         nullCheck();
 
-        return false;
+        return isLyric;
     }
 
     private void nullCheck() {
@@ -104,6 +105,7 @@ public class MusicProxy implements MusicData {
         if(lyric == null){
                 try {
                     this.lyric = new LyricParser(filePath).getLyric();
+                    this.isLyric = true;
                 } catch (NullPointerException e) {
                     return;
                 }

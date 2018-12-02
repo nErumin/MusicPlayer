@@ -16,15 +16,15 @@ public class LyricParser {
     private String[] lrcTime = new String[1000];
     private String[] lrc = new String[1000];
     private String[] index = new String[10];
+    List<String> allLyricString;
     public LyricParser(String filePath) {
+        this.filePath = filePath.replace(".mp3",".lrc");
         splitLyric();
     }
 
     public void splitLyric(){
         File maybeLyricFile = new File(this.filePath);
         if(!maybeLyricFile.exists()) return;
-        this.filePath = filePath;
-        List<String> allLyricString = null;
 
         try {
             allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.ISO_8859_1);
@@ -34,21 +34,33 @@ public class LyricParser {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < allLyricString.size(); i++) {
+        for (int i = 0,j = 1; i < allLyricString.size(); i++) {
             index = allLyricString.get(i).split("]");
             lrcTime[i] = index[0];
             lrcTime[i] = lrcTime[i].replaceAll("\\[", "");
             try {
-                lrc[i] = index[1];
+                lrc[j] = index[1];
             } catch (Exception ArrayIndexOutOfBoundsException) {
 
             }
-            time[i][0] = (lrcTime[i].charAt(0) - 48) * 10
+            time[j][0] = (lrcTime[i].charAt(0) - 48) * 10
                 + (lrcTime[i].charAt(1) - 48);
-            time[i][1] = (lrcTime[i].charAt(3) - 48) * 10
+            time[j][1] = (lrcTime[i].charAt(3) - 48) * 10
                 + (lrcTime[i].charAt(4) - 48);
-            time[i][2] = (lrcTime[i].charAt(6) - 48) * 10
+            time[j][2] = (lrcTime[i].charAt(6) - 48) * 10
                 + (lrcTime[i].charAt(7) - 48);
+
+            if(lrc[j]==null&&j!=1){
+                j--;
+            }
+            else if(lrc[j]!=null&&j==1){
+                j++;
+            }
+            else if(lrc[j]!=null&&j!=1){
+                j++;
+            }
+            else
+            continue;
 //            System.out.println(lrcTime[i]);
 //            System.out.println(time[i][0] + "/" + time[i][1] + "/" + time[i][2]);
 
