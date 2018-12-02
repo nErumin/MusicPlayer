@@ -167,10 +167,10 @@ public class MainGuiController {
     private void processMusicFilesForPlaying(String selectedFileName) {
         Optional<MusicData> selectedMusic
             = currentReferenceState.getSortedEntries()
-            .stream()
-            .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
-            .map(Map.Entry::getValue)
-            .findFirst();
+                                                    .stream()
+                                                    .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+                                                    .map(Map.Entry::getValue)
+                                                    .findFirst();
 
         MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
 
