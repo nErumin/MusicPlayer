@@ -78,14 +78,18 @@ public class MusicPlayer {
         }
     }
 
+    public boolean isPaused() {
+        return playingClip.isRunning() == false;
+    }
+
     public void pausePlay() {
-        if (playingClip.isRunning()) {
+        if (isPaused() == false) {
             playingClip.stop();
         }
     }
 
     public void resumePlay() {
-        if (playingClip.isRunning() == false) {
+        if (isPaused()) {
             playingClip.start();
         }
     }
