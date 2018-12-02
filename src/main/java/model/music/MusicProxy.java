@@ -5,6 +5,7 @@ import model.music.parser.music_parser.ParserCreator;
 import model.music.parser.lyric_parser.LyricParser;
 
 import javax.sound.sampled.AudioInputStream;
+import java.io.File;
 import java.util.Date;
 
 public class MusicProxy implements MusicData {
@@ -101,7 +102,11 @@ public class MusicProxy implements MusicData {
                                       .build();
         }
         if(lyric == null){
-            this.lyric = new LyricParser(filePath).getLyric();
+                try {
+                    this.lyric = new LyricParser(filePath).getLyric();
+                } catch (NullPointerException e) {
+                    return;
+                }
             //가사가 parsing 안되어있으면 parsing해주고, 가사 파일 자체가 없으면 ???
         }
 

@@ -2,9 +2,11 @@ package model.music.parser.lyric_parser;
 
 import model.music.Lyric;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -15,21 +17,25 @@ public class LyricParser {
     private String[] lrc = new String[1000];
     private String[] index = new String[10];
     public LyricParser(String filePath) {
+        splitLyric();
+    }
+
+    public void splitLyric(){
+        File maybeLyricFile = new File(this.filePath);
+        if(!maybeLyricFile.exists()) return;
         this.filePath = filePath;
-        List<String> b = null;
-        System.out.println(this.filePath);
-        this.filePath = this.filePath.replace(".mp3",".lrc");
-        System.out.println(this.filePath);
+        List<String> allLyricString = null;
 
         try {
-            this.filePath = this.filePath.replace(".mp3",".lrc");
-            b = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.UTF_8);
+            allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.ISO_8859_1);
+        } catch (NoSuchFileException e ) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < b.size(); i++) {
-            index = b.get(i).split("]");
+        for (int i = 0; i < allLyricString.size(); i++) {
+            index = allLyricString.get(i).split("]");
             lrcTime[i] = index[0];
             lrcTime[i] = lrcTime[i].replaceAll("\\[", "");
             try {
@@ -45,6 +51,7 @@ public class LyricParser {
                 + (lrcTime[i].charAt(7) - 48);
 //            System.out.println(lrcTime[i]);
 //            System.out.println(time[i][0] + "/" + time[i][1] + "/" + time[i][2]);
+
         }
     }
 

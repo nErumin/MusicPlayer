@@ -70,7 +70,7 @@ public class MainGuiController {
         setReferenceState(fullReferenceState);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
-        new LyricPrintSystem(musicPlayer);
+
     }
 
     private void handleMusicPlayStarting(MusicData musicData) {
@@ -189,6 +189,8 @@ public class MainGuiController {
 
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
+
+        new LyricPrintSystem(musicPlayer).execute();
     }
 
     @FXML
