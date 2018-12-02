@@ -10,6 +10,9 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -41,10 +44,13 @@ public class MainGuiController {
     private ListReferenceState currentReferenceState;
 
     @FXML
-    private Button favoriteMusicListBtn;
+    private Button favoriteMusicListBtn, stopBtn, playBtn, seekPreviousBtn, seekNextBtn, loopBtn, favoriteBtn;
 
     @FXML
+    private Slider musicProgressBar, musicVolumeVar;
+    @FXML
     private ListView<String> musicListView;
+
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
 
@@ -87,19 +93,22 @@ public class MainGuiController {
         listViewItems.addAll(currentReferenceState.getSortedFileNames());
     }
 
-    public void fullMusicListBtnOnClicked() {
+    @FXML
+    private void fullMusicListBtnOnClicked() {
         setReferenceState(fullReferenceState);
 
         refreshListViewItems();
     }
 
-    public void favoriteMusicListBtnOnClicked() {
+    @FXML
+    private void favoriteMusicListBtnOnClicked() {
         setReferenceState(favoriteReferenceState);
 
         refreshListViewItems();
     }
 
-    public void recentPlayedMusicListBtnOnClicked() {
+    @FXML
+    private void recentPlayedMusicListBtnOnClicked() {
         setReferenceState(recentPlayedReferenceState);
 
         refreshListViewItems();
@@ -130,14 +139,16 @@ public class MainGuiController {
         }
     }
 
-    public void clickAlarmMenuItem() {
+    @FXML
+    private void clickAlarmMenuItem() {
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
         alarmSettingGui.makeJustOneWindow(stage);
         alarmSettingGui.showAndWait();
     }
 
-    public void clickShutdownMenuItem(){
+    @FXML
+    private void clickShutdownMenuItem(){
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
         shutdownSettingGui.makeJustOneWindow(stage);
@@ -174,5 +185,50 @@ public class MainGuiController {
 
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
+    }
+
+    @FXML
+    private void clickStopBtn(){
+        System.out.println("click stop next btn");
+    }
+    @FXML
+    private void clickPlayBtn(){
+        boolean play = false;
+        if(play) {
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+            ((ImageView) favoriteBtn.getScene().lookup("#playImageView")).setImage(image);
+            play = false;
+        }
+        else{
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+            ((ImageView) favoriteBtn.getScene().lookup("#playImageView")).setImage(image);
+            play = true;
+        }
+    }
+    @FXML
+    private void clickSeekNextBtn(){
+        System.out.println("click seek next btn");
+    }
+    @FXML
+    private void clickSeekPreviousBtn(){
+        System.out.println("click seek previous btn");
+    }
+    @FXML
+    private void clickFavoriteBtn(){
+        boolean favorite = false;
+        if(favorite) {
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
+            ((ImageView) favoriteBtn.getScene().lookup("#favoriteImageView")).setImage(image);
+            favorite = false;
+        }
+        else{
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+            ((ImageView) favoriteBtn.getScene().lookup("#favoriteImageView")).setImage(image);
+            favorite = true;
+        }
+    }
+    @FXML
+    private void clickLoopBtn(){
+        System.out.println("click loop btn");
     }
 }
