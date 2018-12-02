@@ -3,16 +3,16 @@ package model.music;
 import javax.sound.sampled.AudioInputStream;
 
 public class PlayerMemento {
-    private long progressedMilliSeconds;
+    private long progressedMicroSeconds;
     private AudioInputStream playingStream;
 
-    public PlayerMemento(AudioInputStream playingStream, long progressedMilliSeconds) {
-        this.progressedMilliSeconds = progressedMilliSeconds;
+    public PlayerMemento(AudioInputStream playingStream, long progressedMicroSeconds) {
+        this.progressedMicroSeconds = progressedMicroSeconds;
         this.playingStream = playingStream;
     }
 
-    public long getProgressedMilliSeconds() {
-        return progressedMilliSeconds;
+    public long getProgressedMicroSeconds() {
+        return progressedMicroSeconds;
     }
 
     public AudioInputStream getPlayingStream() {

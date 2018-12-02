@@ -30,6 +30,7 @@ import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
+import thread.LyricPrintSystem;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -41,6 +42,7 @@ public class MainGuiController {
     private ListReferenceState favoriteReferenceState;
     private ListReferenceState currentReferenceState;
 
+
     @FXML
     private Button favoriteMusicListBtn;
 
@@ -48,6 +50,7 @@ public class MainGuiController {
     private ListView<String> musicListView;
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
+
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -62,6 +65,7 @@ public class MainGuiController {
         setReferenceState(fullReferenceState);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+        new LyricPrintSystem(musicPlayer);
     }
 
     private void handleMusicPlayStarting(MusicData musicData) {
