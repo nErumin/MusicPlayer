@@ -13,7 +13,6 @@ import javax.swing.*;
 import static java.lang.Thread.sleep;
 
 public class LyricPrintSystem  extends SwingWorker<Void, Void> {
-    private volatile static LyricPrintSystem uniqueInstance;
     private MusicData currentMusicData;
     private MusicPlayer currentMusicPlayer;
     private Lyric currentMusicLyric;
@@ -22,22 +21,12 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
 
     private Scene scene;
     private Label lyricLabel;
-    public static LyricPrintSystem getInstance(){
-        if(uniqueInstance == null){
-            synchronized(LyricPrintSystem.class){
-                if(uniqueInstance == null){
-                    uniqueInstance = new LyricPrintSystem();
-                }
-            }
-        }
-        return uniqueInstance;
-    }
 
     public LyricPrintSystem(){
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void doInBackground() {
         long[][] currentLyricTime;
         while(true){
             currentMusicData = this.currentMusicPlayer.getCurrentPlayedMusic();
@@ -67,6 +56,8 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
             }
             lyricPart = currentLyricString[start];
 
+            currentMusicLyric.setIsSetLyric(true);
+
             Platform.runLater(()->{
                 lyricLabel.setText(lyricPart);
             });
@@ -75,7 +66,12 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
             termEnd = currentMusicLyric.getMicroTime(currentLyricTime[start+1]);
             termStart = currentMusicLyric.getMicroTime(currentLyricTime[start]);
 //            System.out.println(termStart +"/"+ termEnd+"/start = "+start);
-            sleep((termEnd-termStart)/1000);
+            try {
+                sleep((termEnd-termStart)/1000);
+            } catch (InterruptedException e) {
+                System.out.println("에러발생");
+                e.printStackTrace();
+            }
 
         }
     }

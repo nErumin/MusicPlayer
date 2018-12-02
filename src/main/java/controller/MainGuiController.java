@@ -95,8 +95,11 @@ public class MainGuiController {
     }
 
     private void handleLyricSystem(MusicData musicData){
+        if(lyricPrintSystem!=null){
+            lyricPrintSystem.cancel(true);
+        }
         System.out.println("lyric system played");
-        lyricPrintSystem = LyricPrintSystem.getInstance();
+        lyricPrintSystem = new LyricPrintSystem();
         lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
         lyricPrintSystem.setScene(musicListView.getScene());
         lyricPrintSystem.execute();
