@@ -29,6 +29,7 @@ import model.command.VolumeIncreaseCommand;
 import model.music.MusicData;
 import model.music.MusicPlayer;
 import model.music.MusicProxy;
+import model.music.iterator.LoopDirection;
 import model.music.iterator.MusicIterator;
 import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
@@ -55,7 +56,7 @@ public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn;
     @FXML
-    private ImageView playImageView, favoriteImageView;
+    private ImageView playImageView, favoriteImageView, loopImageView;
     @FXML
     private Slider musicProgressBar, musicVolumeBar;
     @FXML
@@ -373,6 +374,20 @@ public class MainGuiController {
     }
     @FXML
     private void clickLoopBtn(){
-        System.out.println("click loop btn");
+        MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
+        iterator.resetFor(musicPlayer.getCurrentPlayedMusic());
+
+        Image loopImage = musicPlayer.isLooping() ?
+            new Image(getClass().getClassLoader().getResourceAsStream("image/loop.png")) :
+            new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+
+        if (musicPlayer.isLooping() == false) {
+            iterator.setIteratorDirection(new LoopDirection());
+        }
+
+        loopImageView.setImage(loopImage);
+
+        musicPlayer.setLooping(!musicPlayer.isLooping());
+        musicPlayer.setIterationMode(iterator);
     }
 }

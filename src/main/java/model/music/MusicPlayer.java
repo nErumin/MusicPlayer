@@ -20,6 +20,7 @@ public class MusicPlayer {
 
     private LineListener lineHandler = this::handleClipFinished;
     private float currentVolumeRatio = 1.0f;
+    private boolean looping = false;
 
     public MusicPlayer() throws LineUnavailableException {
         this(new NoneMusicIterator());
@@ -81,6 +82,14 @@ public class MusicPlayer {
         } catch(NullPointerException e){
             return null;
         }
+    }
+
+    public boolean isLooping() {
+        return looping;
+    }
+
+    public void setLooping(boolean looping) {
+        this.looping = looping;
     }
 
     public boolean isPaused() {
