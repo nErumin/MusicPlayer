@@ -197,7 +197,7 @@ public class MainGuiController {
         if (lyricPrintSystem!=null) {
             lyricPrintSystem.cancel(true);
         }
-        
+
         lyricPrintSystem = new LyricPrintSystem();
         lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
         lyricPrintSystem.setScene(musicListView.getScene());
@@ -337,12 +337,12 @@ public class MainGuiController {
     private void clickPlayBtn(){
         if(musicPlayer.isPaused()) {
             musicPlayer.resumePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
             playImageView.setImage(image);
         }
         else{
             musicPlayer.pausePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
             playImageView.setImage(image);
         }
     }

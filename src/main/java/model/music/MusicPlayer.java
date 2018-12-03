@@ -133,7 +133,7 @@ public class MusicPlayer {
             playNextMusic();
         } else if (lineEvent.getType() == LineEvent.Type.CLOSE) {
             playingClip.removeLineListener(lineHandler);
-        } else {
+        } else if (lineEvent.getType() != LineEvent.Type.STOP){
             playingClip.start();
         }
     }
