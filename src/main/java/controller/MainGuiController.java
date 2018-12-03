@@ -3,6 +3,8 @@ package controller;
 import io.DirectoryReader;
 import io.FileExtensionFilteredDirectoryReader;
 import io.NonRecursiveDirectoryReader;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -75,6 +77,21 @@ public class MainGuiController {
         musicPlayer.registerStartListener(this::handlePlayBtn);
         musicPlayer.registerStartListener(this::handleFavoriteBtn);
         musicPlayer.registerStartListener(this::handleLyricSystem);
+
+        musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                musicPlayer.setVolumeRatio((new_val.floatValue())/100);
+            }
+        });
+        musicProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                System.out.println(new_val);
+            }
+        });
+
+
     }
 
     private void handlePlayBtn(MusicData musicData){
@@ -96,7 +113,6 @@ public class MainGuiController {
         if(lyricPrintSystem!=null){
             lyricPrintSystem.cancel(true);
         }
-        System.out.println("lyric system played");
         lyricPrintSystem = new LyricPrintSystem();
         lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
         lyricPrintSystem.setScene(musicListView.getScene());
@@ -265,10 +281,5 @@ public class MainGuiController {
     @FXML
     private void clickLoopBtn(){
         System.out.println("click loop btn");
-    }
-
-    @FXML
-    private void doVolumeSlider(){
-        System.out.println(musicVolumeBar.getValue());
     }
 }

@@ -59,10 +59,10 @@
                             <center>
                                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                   <top>
-                                     <Slider id="musicProgressBar" fx:id="musicProgressBar" BorderPane.alignment="CENTER" />
+                                     <Slider id="musicProgressBar" fx:id="musicProgressBar"  BorderPane.alignment="CENTER" />
                                   </top>
                                   <bottom>
-                                     <Slider id="musicVolumeBar" fx:id="musicVolumeBar" onMouseClicked="#doVolumeSlider" onDragDropped="#doVolumeSlider" BorderPane.alignment="CENTER" />
+                                     <Slider id="musicVolumeBar" fx:id="musicVolumeBar" BorderPane.alignment="CENTER" />
                                   </bottom>
                                   <center>
                                      <GridPane BorderPane.alignment="CENTER">
