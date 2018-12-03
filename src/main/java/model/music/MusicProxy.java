@@ -104,8 +104,14 @@ public class MusicProxy implements MusicData {
         if(lyric == null){
             try {
                 this.lyric = new LyricParser(filePath).getLyric();
-                this.isLyric = true;
+                if(this.lyric==null){
+                    this.isLyric = false;
+                }
+                else {
+                    this.isLyric = true;
+                }
             } catch (NullPointerException e) {
+
                 return;
             }
             //가사가 parsing 안되어있으면 parsing해주고, 가사 파일 자체가 없으면 ???

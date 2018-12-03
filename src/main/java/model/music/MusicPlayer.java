@@ -115,16 +115,16 @@ public class MusicPlayer {
     }
 
     public void skipSeconds(int seconds) {
-        long milliseconds = TimeUnit.SECONDS.toMicros(seconds);
-        long currentProgressedMilliSeconds = playingClip.getMicrosecondPosition();
+        long microSeconds = TimeUnit.SECONDS.toMicros(seconds);
+        long currentProgressedMicroSeconds = playingClip.getMicrosecondPosition();
 
-        playFromMicroSeconds(currentProgressedMilliSeconds + milliseconds);
+        playFromMicroSeconds(currentProgressedMicroSeconds + microSeconds);
     }
 
     public void playFromLengthRatio(double ratio) {
-        long milliPosition = (long) (playingClip.getMicrosecondLength() * ratio);
+        long microPosition = (long) (playingClip.getMicrosecondLength() * ratio);
 
-        playFromMicroSeconds(milliPosition);
+        playFromMicroSeconds(microPosition);
     }
 
     private void playFromMicroSeconds(long microseconds) {
