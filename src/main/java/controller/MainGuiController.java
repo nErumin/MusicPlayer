@@ -5,11 +5,18 @@ import io.FileExtensionFilteredDirectoryReader;
 import io.NonRecursiveDirectoryReader;
 import javafx.collections.*;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import model.Path;
+import model.command.Command;
+import model.command.SkipCommand;
+import model.command.VolumeIncreaseCommand;
 import model.music.MusicData;
 import model.music.MusicPlayer;
 import model.music.MusicProxy;
@@ -30,6 +37,7 @@ import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
+import utility.SceneUtility;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -48,6 +56,7 @@ public class MainGuiController {
     private ListView<String> musicListView;
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
+    private List<Command> executedCommands;
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -55,16 +64,98 @@ public class MainGuiController {
         musicFiles = FXCollections.observableHashMap();
         musicFiles.addListener(this::handleFileListChanged);
 
+        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+
+        initializeStates();
+    }
+
+    private void initializeStates() {
         fullReferenceState = new FullReferenceState(musicFiles);
         recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
         favoriteReferenceState = new FavoriteReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
+    }
 
-        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+    private void initializeShortcut() {
+        Scene scene = favoriteMusicListBtn.getScene();
+
+        KeyCombination volumeIncreaseShortcutKey =
+            new KeyCodeCombination(KeyCode.U, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination volumeDecreaseShortcutKey =
+            new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination skipForwardShortcutKey =
+            new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination skipBackwardShortcutKey =
+            new KeyCodeCombination(KeyCode.LEFT, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination undoShortcutKey =
+            new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+
+        SceneUtility.registerKey(
+            scene,
+            volumeIncreaseShortcutKey,
+            () -> {
+                Command command = new VolumeIncreaseCommand(musicPlayer, 0.1f);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            volumeDecreaseShortcutKey,
+            () -> {
+                Command command = new VolumeIncreaseCommand(musicPlayer, -0.1f);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            skipForwardShortcutKey,
+            () -> {
+                Command command = new SkipCommand(musicPlayer, 10);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            skipBackwardShortcutKey,
+            () -> {
+                Command command = new SkipCommand(musicPlayer, -10);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            undoShortcutKey,
+            () -> {
+                if (executedCommands.size() > 0) {
+                    Command command = executedCommands.get(executedCommands.size() - 1);
+                    command.undo();
+
+                    executedCommands.remove(command);
+                }
+            }
+        );
     }
 
     private void handleMusicPlayStarting(MusicData musicData) {
+        executedCommands.clear();
+
         if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
             musicData.setRecentPlayedDate(currentDate);
@@ -119,6 +210,11 @@ public class MainGuiController {
 
         if (chosenDirectory != null) {
             fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+        }
+
+        if (executedCommands == null) {
+            executedCommands = new ArrayList<>();
+            initializeShortcut();
         }
     }
 
