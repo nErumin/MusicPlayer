@@ -70,7 +70,7 @@ public class MainGuiController {
     private MusicPlayer musicPlayer;
     private List<Command> executedCommands;
 
-    LyricPrintSystem lyricPrintSystem;
+    private LyricPrintSystem lyricPrintSystem;
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -241,10 +241,7 @@ public class MainGuiController {
     }
 
     private void handleMusicImageView(MusicData musicData){
-        Image image = musicData.getImage();
         musicImageView.setImage(musicData.getImage());
-        musicImageView.setFitHeight(musicImageView.getFitHeight());
-        musicImageView.setFitWidth(musicImageView.getFitWidth());
     }
 
     private void setReferenceState(ListReferenceState newState) {
