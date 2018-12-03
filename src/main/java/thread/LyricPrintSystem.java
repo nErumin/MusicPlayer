@@ -26,7 +26,7 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
     }
 
     @Override
-    protected Void doInBackground() {
+    protected Void doInBackground() throws Exception {
         long[][] currentLyricTime;
         while(true){
             currentMusicData = this.currentMusicPlayer.getCurrentPlayedMusic();
@@ -61,13 +61,7 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
             Platform.runLater(()->{
                 lyricLabel.setText(lyricPart);
             });
-
-            try {
-                sleep(10);
-            } catch (InterruptedException e) {
-                System.out.println("에러발생");
-                e.printStackTrace();
-            }
+            sleep(10);
 
         }
     }
