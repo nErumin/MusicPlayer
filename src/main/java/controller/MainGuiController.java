@@ -78,10 +78,6 @@ public class MainGuiController {
         musicFiles = FXCollections.observableHashMap();
         musicFiles.addListener(this::handleFileListChanged);
 
-        //lyricLabel.setDisable(true);
-
-        //lyricLabel.setStyle("-fx-background-color: transparent;");
-        //lyricTextArea.setStyle("-fx-text-fill:black;");
         lyricLabel.setWrapText(true);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
@@ -90,8 +86,9 @@ public class MainGuiController {
         musicPlayer.registerStartListener(this::handleLyricSystem);
         musicPlayer.registerStartListener(this::handleMusicNameLabel);
         musicPlayer.registerStartListener(this::handleMusicImageView);
+        musicPlayer.registerStartListener(this::handleLyricLabel);
 
-        musicVolumeBar.setValue(80);
+        musicVolumeBar.setValue(80); // default value
         musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
@@ -193,10 +190,20 @@ public class MainGuiController {
         );
     }
 
+    private void handleLyricLabel(MusicData musicData){
+        if(musicData.isLyric()) {
+            lyricLabel.setStyle("-fx-background-color:white;");
+        }
+        else {
+            lyricLabel.setStyle("-fx-background-color:transparent;");
+        }
+    }
+
     private void handlePlayBtn(MusicData musicData){
         Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
         playImageView.setImage(image);
     }
+
     private void handleFavoriteBtn(MusicData musicData){
         if(musicData.isFavorite()){
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
@@ -362,15 +369,19 @@ public class MainGuiController {
     }
     @FXML
     private void clickPlayBtn(){
-        if(musicPlayer.isPaused()) {
-            musicPlayer.resumePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
-            playImageView.setImage(image);
+        if(musicPlayer.getCurrentPlayedMusic() == null){
+            System.out.println("Plz set music");
         }
-        else{
-            musicPlayer.pausePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
-            playImageView.setImage(image);
+        else {
+            if (musicPlayer.isPaused()) {
+                musicPlayer.resumePlay();
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+                playImageView.setImage(image);
+            } else {
+                musicPlayer.pausePlay();
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+                playImageView.setImage(image);
+            }
         }
     }
     @FXML
