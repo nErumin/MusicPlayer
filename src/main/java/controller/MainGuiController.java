@@ -10,9 +10,7 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -50,11 +48,15 @@ public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn;
     @FXML
-    private ImageView playImageView, favoriteImageView;
+    private ImageView playImageView, favoriteImageView, musicImageView;
     @FXML
     private Slider musicProgressBar, musicVolumeBar;
     @FXML
     private ListView<String> musicListView;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private TextArea lyricTextArea;
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
@@ -72,15 +74,24 @@ public class MainGuiController {
         favoriteReferenceState = new FavoriteReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
+        lyricTextArea.setDisable(true);
+
+        lyricTextArea.setStyle("-fx-background-color: transparent;");
+        //lyricTextArea.setStyle("-fx-text-fill:black;");
+        lyricTextArea.setWrapText(true);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
         musicPlayer.registerStartListener(this::handlePlayBtn);
         musicPlayer.registerStartListener(this::handleFavoriteBtn);
         musicPlayer.registerStartListener(this::handleLyricSystem);
+        musicPlayer.registerStartListener(this::handleMusicNameLabel);
+        musicPlayer.registerStartListener(this::handleMusicImageView);
 
+        musicVolumeBar.setValue(80);
         musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
+
                 musicPlayer.setVolumeRatio((new_val.floatValue())/100);
             }
         });
@@ -110,19 +121,30 @@ public class MainGuiController {
     }
 
     private void handleLyricSystem(MusicData musicData){
-        if(lyricPrintSystem!=null){
-            lyricPrintSystem.cancel(true);
+        if(musicPlayer.getCurrentPlayedMusic().getLyric() != null) {
+            if (lyricPrintSystem != null) {
+                lyricPrintSystem.cancel(true);
+            }
+            lyricPrintSystem = new LyricPrintSystem();
+            lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+            lyricPrintSystem.setLyricTextArea(lyricTextArea);
+            lyricPrintSystem.execute();
         }
-        lyricPrintSystem = new LyricPrintSystem();
-        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
-        lyricPrintSystem.setScene(musicListView.getScene());
-        lyricPrintSystem.execute();
     }
     private void handleMusicPlayStarting(MusicData musicData) {
         if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
             musicData.setRecentPlayedDate(currentDate);
         }
+    }
+    private void handleMusicNameLabel(MusicData musicData){
+        nameLabel.setText(musicData.getTitle());
+    }
+    private void handleMusicImageView(MusicData musicData){
+
+        musicImageView.getFitHeight();
+        musicImageView.getFitWidth();
+        musicImageView.setImage(musicData.getImage());
     }
 
     private void setReferenceState(ListReferenceState newState) {
