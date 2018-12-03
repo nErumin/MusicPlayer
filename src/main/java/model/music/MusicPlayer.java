@@ -2,6 +2,7 @@ package model.music;
 
 import model.music.iterator.MusicIterator;
 import model.music.iterator.NoneMusicIterator;
+import utility.MathUtility;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -18,6 +19,8 @@ public class MusicPlayer {
     private List<Consumer<MusicData>> musicEndingListeners;
 
     private LineListener lineHandler = this::handleClipFinished;
+    private float currentVolumeRatio = 1.0f;
+    private boolean looping = false;
 
     public MusicPlayer() throws LineUnavailableException {
         this(new NoneMusicIterator());
@@ -62,7 +65,10 @@ public class MusicPlayer {
         try {
             playingClip.addLineListener(lineHandler);
             playingClip.open(playingInputStream);
+            setVolumeRatio(currentVolumeRatio);
+
             playingClip.start();
+
         } catch (LineUnavailableException | IOException | IllegalStateException exception) {
             exception.printStackTrace();
 
@@ -76,6 +82,14 @@ public class MusicPlayer {
         } catch(NullPointerException e){
             return null;
         }
+    }
+
+    public boolean isLooping() {
+        return looping;
+    }
+
+    public void setLooping(boolean looping) {
+        this.looping = looping;
     }
 
     public boolean isPaused() {
@@ -128,7 +142,7 @@ public class MusicPlayer {
             playNextMusic();
         } else if (lineEvent.getType() == LineEvent.Type.CLOSE) {
             playingClip.removeLineListener(lineHandler);
-        } else {
+        } else if (lineEvent.getType() != LineEvent.Type.STOP){
             playingClip.start();
         }
     }
@@ -147,19 +161,33 @@ public class MusicPlayer {
         }
     }
 
+    public float getVolumeRatio() {
+        return currentVolumeRatio;
+    }
+
     public void setVolumeRatio(float ratio) {
         FloatControl volumeControl = (FloatControl) playingClip.getControl(FloatControl.Type.MASTER_GAIN);
 
+        currentVolumeRatio = MathUtility.clamp(ratio, 0.0f, 1.0f);
         float range = volumeControl.getMaximum() - volumeControl.getMinimum();
-        float gain = (range * ratio) + volumeControl.getMinimum();
+        float gain = (range * currentVolumeRatio) + volumeControl.getMinimum();
         volumeControl.setValue(gain);
     }
 
     public PlayerMemento createMemento() {
-        return new PlayerMemento(playingInputStream, playingClip.getMicrosecondPosition());
+        return new PlayerMemento(playingInputStream, playingClip.getMicrosecondPosition(), getVolumeRatio());
     }
 
-    public void recoverState(PlayerMemento memento) {
+    public void recoverVolumeState(PlayerMemento memento) {
+        if (playingClip != null &&
+            playingInputStream != null &&
+            memento.getPlayingStream().equals(playingInputStream)) {
+
+            setVolumeRatio(memento.getVolumeRatio());
+        }
+    }
+
+    public void recoverPlayState(PlayerMemento memento) {
         if (playingClip != null &&
             playingInputStream != null &&
             memento.getPlayingStream().equals(playingInputStream)) {
