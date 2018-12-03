@@ -14,7 +14,9 @@ public class Music implements MusicData {
     private Image image;
     private AudioData audioData;
     private boolean isFavoriteSelected;
+    private boolean isLyric;
     private Date recentPlayedDate;
+    private Lyric lyric;
 
     public Music(String title, String artist, String albumName, Image image, AudioInputStream audioStream) {
         this.title = title;
@@ -23,9 +25,21 @@ public class Music implements MusicData {
         this.image = image;
         this.isFavoriteSelected = false;
         this.recentPlayedDate = null;
+        this.isLyric = false;
 
         audioData = new AudioData(audioStream);
     }
+
+    @Override
+    public Lyric getLyric() {
+        if(isLyric){
+            return lyric;
+        }
+        else return null;
+    }
+
+    @Override
+    public boolean isLyric() { return isLyric;}
 
     @Override
     public boolean isFavorite() {

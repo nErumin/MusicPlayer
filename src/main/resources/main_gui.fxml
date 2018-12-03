@@ -59,7 +59,7 @@
                             <center>
                                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                   <top>
-                                     <Slider id="musicProgressBar" fx:id="musicProgressBar" BorderPane.alignment="CENTER" />
+                                     <Slider id="musicProgressBar" fx:id="musicProgressBar"  BorderPane.alignment="CENTER" />
                                   </top>
                                   <bottom>
                                      <Slider id="musicVolumeBar" fx:id="musicVolumeBar" BorderPane.alignment="CENTER" />
@@ -156,7 +156,7 @@
                             <top>
                                <AnchorPane prefHeight="20.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                   <children>
-                                     <Label id="musicNameLabel" layoutX="16.0" layoutY="4.0" prefHeight="18.0" prefWidth="190.0" text="Label" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                                     <Label id="lyricLabel" fx:id="lyricLabel" layoutX="16.0" layoutY="4.0" prefHeight="18.0" prefWidth="190.0" text="Label" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
                                   </children>
                                </AnchorPane>
                             </top>
