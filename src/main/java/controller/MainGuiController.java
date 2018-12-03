@@ -10,22 +10,34 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import model.Path;
+import model.command.Command;
+import model.command.SkipCommand;
+import model.command.VolumeIncreaseCommand;
 import model.music.MusicData;
 import model.music.MusicPlayer;
 import model.music.MusicProxy;
+import model.music.iterator.LoopDirection;
 import model.music.iterator.MusicIterator;
 import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
 import thread.LyricPrintSystem;
+import utility.SceneUtility;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -33,10 +45,7 @@ import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class MainGuiController {
     private ListReferenceState fullReferenceState;
@@ -48,18 +57,18 @@ public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn;
     @FXML
-    private ImageView playImageView, favoriteImageView, musicImageView;
+    private ImageView playImageView, favoriteImageView, musicImageView, loopImageView;
+
     @FXML
     private Slider musicProgressBar, musicVolumeBar;
     @FXML
     private ListView<String> musicListView;
     @FXML
-    private Label nameLabel;
-    @FXML
-    private Label lyricLabel;
+    private Label nameLabel, lyricLabel;
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
+    private List<Command> executedCommands;
 
     LyricPrintSystem lyricPrintSystem;
 
@@ -69,11 +78,6 @@ public class MainGuiController {
         musicFiles = FXCollections.observableHashMap();
         musicFiles.addListener(this::handleFileListChanged);
 
-        fullReferenceState = new FullReferenceState(musicFiles);
-        recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
-        favoriteReferenceState = new FavoriteReferenceState(musicFiles);
-
-        setReferenceState(fullReferenceState);
         //lyricLabel.setDisable(true);
 
         //lyricLabel.setStyle("-fx-background-color: transparent;");
@@ -102,7 +106,91 @@ public class MainGuiController {
             }
         });
 
+        initializeStates();
+    }
 
+    private void initializeStates() {
+        fullReferenceState = new FullReferenceState(musicFiles);
+        recentPlayedReferenceState = new RecentPlayedReferenceState(musicFiles);
+        favoriteReferenceState = new FavoriteReferenceState(musicFiles);
+
+        setReferenceState(fullReferenceState);
+    }
+
+    private void initializeShortcut() {
+        Scene scene = favoriteMusicListBtn.getScene();
+
+        KeyCombination volumeIncreaseShortcutKey =
+            new KeyCodeCombination(KeyCode.U, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination volumeDecreaseShortcutKey =
+            new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination skipForwardShortcutKey =
+            new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination skipBackwardShortcutKey =
+            new KeyCodeCombination(KeyCode.LEFT, KeyCombination.CONTROL_DOWN);
+
+        KeyCombination undoShortcutKey =
+            new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+
+        SceneUtility.registerKey(
+            scene,
+            volumeIncreaseShortcutKey,
+            () -> {
+                Command command = new VolumeIncreaseCommand(musicPlayer, 0.1f);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            volumeDecreaseShortcutKey,
+            () -> {
+                Command command = new VolumeIncreaseCommand(musicPlayer, -0.1f);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            skipForwardShortcutKey,
+            () -> {
+                Command command = new SkipCommand(musicPlayer, 10);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            skipBackwardShortcutKey,
+            () -> {
+                Command command = new SkipCommand(musicPlayer, -10);
+                command.execute();
+
+                executedCommands.add(command);
+            }
+        );
+
+        SceneUtility.registerKey(
+            scene,
+            undoShortcutKey,
+            () -> {
+                if (executedCommands.size() > 0) {
+                    Command command = executedCommands.get(executedCommands.size() - 1);
+                    command.undo();
+
+                    executedCommands.remove(command);
+                }
+            }
+        );
     }
 
     private void handlePlayBtn(MusicData musicData){
@@ -120,8 +208,8 @@ public class MainGuiController {
         }
     }
 
-    private void handleLyricSystem(MusicData musicData){
-        if(musicPlayer.getCurrentPlayedMusic().getLyric() != null) {
+    private void handleLyricSystem(MusicData musicData) {
+        if (musicPlayer.getCurrentPlayedMusic().getLyric() != null) {
             if (lyricPrintSystem != null) {
                 lyricPrintSystem.cancel(true);
             }
@@ -131,7 +219,10 @@ public class MainGuiController {
             lyricPrintSystem.execute();
         }
     }
+    
     private void handleMusicPlayStarting(MusicData musicData) {
+        executedCommands.clear();
+
         if (currentReferenceState.equals(recentPlayedReferenceState) == false) {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
             musicData.setRecentPlayedDate(currentDate);
@@ -198,6 +289,11 @@ public class MainGuiController {
 
         if (chosenDirectory != null) {
             fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
+        }
+
+        if (executedCommands == null) {
+            executedCommands = new ArrayList<>();
+            initializeShortcut();
         }
     }
 
@@ -266,12 +362,12 @@ public class MainGuiController {
     private void clickPlayBtn(){
         if(musicPlayer.isPaused()) {
             musicPlayer.resumePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
             playImageView.setImage(image);
         }
         else{
             musicPlayer.pausePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
             playImageView.setImage(image);
         }
     }
@@ -302,6 +398,20 @@ public class MainGuiController {
     }
     @FXML
     private void clickLoopBtn(){
-        System.out.println("click loop btn");
+        MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
+        iterator.resetFor(musicPlayer.getCurrentPlayedMusic());
+
+        Image loopImage = musicPlayer.isLooping() ?
+            new Image(getClass().getClassLoader().getResourceAsStream("image/loop.png")) :
+            new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+
+        if (musicPlayer.isLooping() == false) {
+            iterator.setIteratorDirection(new LoopDirection());
+        }
+
+        loopImageView.setImage(loopImage);
+
+        musicPlayer.setLooping(!musicPlayer.isLooping());
+        musicPlayer.setIterationMode(iterator);
     }
 }
