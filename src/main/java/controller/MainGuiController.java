@@ -56,7 +56,7 @@ public class MainGuiController {
     @FXML
     private Label nameLabel;
     @FXML
-    private TextArea lyricTextArea;
+    private Label lyricLabel;
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
@@ -74,11 +74,11 @@ public class MainGuiController {
         favoriteReferenceState = new FavoriteReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
-        lyricTextArea.setDisable(true);
+        //lyricLabel.setDisable(true);
 
-        lyricTextArea.setStyle("-fx-background-color: transparent;");
+        //lyricLabel.setStyle("-fx-background-color: transparent;");
         //lyricTextArea.setStyle("-fx-text-fill:black;");
-        lyricTextArea.setWrapText(true);
+        lyricLabel.setWrapText(true);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
         musicPlayer.registerStartListener(this::handlePlayBtn);
@@ -127,7 +127,7 @@ public class MainGuiController {
             }
             lyricPrintSystem = new LyricPrintSystem();
             lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
-            lyricPrintSystem.setLyricTextArea(lyricTextArea);
+            lyricPrintSystem.setLyricLabel(lyricLabel);
             lyricPrintSystem.execute();
         }
     }

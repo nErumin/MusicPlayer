@@ -54,7 +54,7 @@
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <ImageView id="musicImageView" fx:id="musicImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <TextArea id="lyricTextArea" fx:id="lyricTextArea" prefHeight="50.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                              <Label id="lyricLabel" fx:id="lyricLabel" prefHeight="50.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                             </children>
                         </AnchorPane>
                          <BorderPane prefHeight="200.0" prefWidth="200.0">
