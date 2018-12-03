@@ -45,7 +45,7 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
             }
             for (int i = 0; i < j; i++) {
                 if (currentMusicTime >= currentMusicLyric.getMicroTime(currentLyricTime[i])) {
-                    start = i;Q 
+                    start = i;
                 }
             }
 
