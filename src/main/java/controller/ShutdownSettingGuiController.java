@@ -14,7 +14,8 @@ public class ShutdownSettingGuiController {
     public void initialize(){
     }
 
-    public void okBtnClicked(){
+    @FXML
+    private void okBtnClicked(){
         updateShutdown();
         ((Stage)shutdownSetBtn.getScene().getWindow()).close();
     }

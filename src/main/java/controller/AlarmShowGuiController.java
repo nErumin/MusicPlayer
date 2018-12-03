@@ -11,7 +11,8 @@ public class AlarmShowGuiController {
     public void initialize(){
     }
 
-    public void okBtnClicked(){
+    @FXML
+    private void okBtnClicked(){
         ((Stage)alarmShowOkBtn.getScene().getWindow()).close();
     }
 }

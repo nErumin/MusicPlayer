@@ -3,7 +3,12 @@ package controller;
 import io.DirectoryReader;
 import io.FileExtensionFilteredDirectoryReader;
 import io.NonRecursiveDirectoryReader;
-import javafx.collections.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,8 +16,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import model.Path;
 import model.command.Command;
 import model.command.SkipCommand;
@@ -20,28 +29,21 @@ import model.command.VolumeIncreaseCommand;
 import model.music.MusicData;
 import model.music.MusicPlayer;
 import model.music.MusicProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javafx.stage.Stage;
-import model.music.PlayerMemento;
-import model.music.iterator.BackwardDirection;
-import model.music.iterator.ForwardDirection;
 import model.music.iterator.MusicIterator;
-import model.music.iterator.NormalMusicIterator;
 import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
 import utility.SceneUtility;
+import thread.LyricPrintSystem;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 public class MainGuiController {
     private ListReferenceState fullReferenceState;
@@ -49,14 +51,21 @@ public class MainGuiController {
     private ListReferenceState favoriteReferenceState;
     private ListReferenceState currentReferenceState;
 
-    @FXML
-    private Button favoriteMusicListBtn;
 
     @FXML
+    private Button favoriteMusicListBtn;
+    @FXML
+    private ImageView playImageView, favoriteImageView;
+    @FXML
+    private Slider musicProgressBar, musicVolumeBar;
+    @FXML
     private ListView<String> musicListView;
+
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
     private List<Command> executedCommands;
+
+    LyricPrintSystem lyricPrintSystem;
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -65,6 +74,22 @@ public class MainGuiController {
         musicFiles.addListener(this::handleFileListChanged);
 
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+        musicPlayer.registerStartListener(this::handlePlayBtn);
+        musicPlayer.registerStartListener(this::handleFavoriteBtn);
+        musicPlayer.registerStartListener(this::handleLyricSystem);
+
+        musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                musicPlayer.setVolumeRatio((new_val.floatValue())/100);
+            }
+        });
+        musicProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                System.out.println(new_val);
+            }
+        });
 
         initializeStates();
     }
@@ -153,6 +178,32 @@ public class MainGuiController {
         );
     }
 
+    private void handlePlayBtn(MusicData musicData){
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+        playImageView.setImage(image);
+    }
+    private void handleFavoriteBtn(MusicData musicData){
+        if(musicData.isFavorite()){
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+            favoriteImageView.setImage(image);
+        }
+        else{
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
+            favoriteImageView.setImage(image);
+        }
+    }
+
+    private void handleLyricSystem(MusicData musicData) {
+        if (lyricPrintSystem!=null) {
+            lyricPrintSystem.cancel(true);
+        }
+        
+        lyricPrintSystem = new LyricPrintSystem();
+        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+        lyricPrintSystem.setScene(musicListView.getScene());
+        lyricPrintSystem.execute();
+    }
+
     private void handleMusicPlayStarting(MusicData musicData) {
         executedCommands.clear();
 
@@ -179,19 +230,22 @@ public class MainGuiController {
         listViewItems.addAll(currentReferenceState.getSortedFileNames());
     }
 
-    public void fullMusicListBtnOnClicked() {
+    @FXML
+    private void fullMusicListBtnOnClicked() {
         setReferenceState(fullReferenceState);
 
         refreshListViewItems();
     }
 
-    public void favoriteMusicListBtnOnClicked() {
+    @FXML
+    private void favoriteMusicListBtnOnClicked() {
         setReferenceState(favoriteReferenceState);
 
         refreshListViewItems();
     }
 
-    public void recentPlayedMusicListBtnOnClicked() {
+    @FXML
+    private void recentPlayedMusicListBtnOnClicked() {
         setReferenceState(recentPlayedReferenceState);
 
         refreshListViewItems();
@@ -227,14 +281,16 @@ public class MainGuiController {
         }
     }
 
-    public void clickAlarmMenuItem() {
+    @FXML
+    private void clickAlarmMenuItem() {
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         AlarmSettingGui alarmSettingGui = new AlarmSettingGui();
         alarmSettingGui.makeJustOneWindow(stage);
         alarmSettingGui.showAndWait();
     }
 
-    public void clickShutdownMenuItem(){
+    @FXML
+    private void clickShutdownMenuItem(){
         Stage stage = (Stage)favoriteMusicListBtn.getScene().getWindow();
         ShutdownSettingGui shutdownSettingGui = new ShutdownSettingGui();
         shutdownSettingGui.makeJustOneWindow(stage);
@@ -253,10 +309,10 @@ public class MainGuiController {
     private void processMusicFilesForPlaying(String selectedFileName) {
         Optional<MusicData> selectedMusic
             = currentReferenceState.getSortedEntries()
-                                   .stream()
-                                   .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
-                                   .map(Map.Entry::getValue)
-                                   .findFirst();
+            .stream()
+            .filter(entry -> entry.getKey().getFileName().equals(selectedFileName))
+            .map(Map.Entry::getValue)
+            .findFirst();
 
         MusicIterator iterator = currentReferenceState.makeIterator(currentReferenceState.getSortedMusics());
 
@@ -271,5 +327,52 @@ public class MainGuiController {
 
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
+    }
+
+    @FXML
+    private void clickStopBtn(){
+        musicPlayer.stopPlay();
+    }
+    @FXML
+    private void clickPlayBtn(){
+        if(musicPlayer.isPaused()) {
+            musicPlayer.resumePlay();
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+            playImageView.setImage(image);
+        }
+        else{
+            musicPlayer.pausePlay();
+            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+            playImageView.setImage(image);
+        }
+    }
+    @FXML
+    private void clickSeekNextBtn(){
+        musicPlayer.skipSeconds(10);
+    }
+    @FXML
+    private void clickSeekPreviousBtn(){
+        musicPlayer.skipSeconds(-10);
+    }
+    @FXML
+    private void clickFavoriteBtn(){
+        if(musicPlayer.getCurrentPlayedMusic() == null){
+            System.out.println("Plz set music");
+        }
+        else {
+            if (musicPlayer.getCurrentPlayedMusic().isFavorite()) {
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/unfavorite-star.png"));
+                favoriteImageView.setImage(image);
+                musicPlayer.getCurrentPlayedMusic().setFavorite(false);
+            } else {
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+                favoriteImageView.setImage(image);
+                musicPlayer.getCurrentPlayedMusic().setFavorite(true);
+            }
+        }
+    }
+    @FXML
+    private void clickLoopBtn(){
+        System.out.println("click loop btn");
     }
 }

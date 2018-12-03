@@ -17,7 +17,8 @@ public class AlarmSettingGuiController {
     public void initialize(){
     }
 
-    public void setBtnOnClicked(){
+    @FXML
+    private void setBtnOnClicked(){
         makeNewAlarm();
     }
     

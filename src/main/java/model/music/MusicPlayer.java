@@ -75,14 +75,26 @@ public class MusicPlayer {
         }
     }
 
+    public Clip getPlayingClip(){
+        try{
+            return playingClip;
+        } catch(NullPointerException e){
+            return null;
+        }
+    }
+
+    public boolean isPaused() {
+        return playingClip.isRunning() == false;
+    }
+
     public void pausePlay() {
-        if (playingClip.isRunning()) {
+        if (isPaused() == false) {
             playingClip.stop();
         }
     }
 
     public void resumePlay() {
-        if (playingClip.isRunning() == false) {
+        if (isPaused()) {
             playingClip.start();
         }
     }
@@ -171,7 +183,7 @@ public class MusicPlayer {
             playingInputStream != null &&
             memento.getPlayingStream().equals(playingInputStream)) {
 
-            playFromMicroSeconds(memento.getProgressedMilliSeconds());
+            playFromMicroSeconds(memento.getProgressedMicroSeconds());
         }
     }
 
