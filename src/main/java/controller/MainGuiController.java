@@ -12,13 +12,14 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -35,8 +36,8 @@ import model.music.state.FavoriteReferenceState;
 import model.music.state.FullReferenceState;
 import model.music.state.ListReferenceState;
 import model.music.state.RecentPlayedReferenceState;
-import utility.SceneUtility;
 import thread.LyricPrintSystem;
+import utility.SceneUtility;
 import view.AlarmSettingGui;
 import view.ShutdownSettingGui;
 
@@ -56,17 +57,20 @@ public class MainGuiController {
     @FXML
     private Button favoriteMusicListBtn;
     @FXML
-    private ImageView playImageView, favoriteImageView, loopImageView;
+    private ImageView playImageView, favoriteImageView, musicImageView, loopImageView;
+
     @FXML
     private Slider musicProgressBar, musicVolumeBar;
     @FXML
     private ListView<String> musicListView;
+    @FXML
+    private Label nameLabel, lyricLabel;
 
     private ObservableMap<Path, MusicData> musicFiles;
     private MusicPlayer musicPlayer;
     private List<Command> executedCommands;
 
-    LyricPrintSystem lyricPrintSystem;
+    private LyricPrintSystem lyricPrintSystem;
 
     public void initialize() throws LineUnavailableException {
         musicPlayer = new MusicPlayer();
@@ -74,14 +78,21 @@ public class MainGuiController {
         musicFiles = FXCollections.observableHashMap();
         musicFiles.addListener(this::handleFileListChanged);
 
+        lyricLabel.setWrapText(true);
+
         musicPlayer.registerStartListener(this::handleMusicPlayStarting);
         musicPlayer.registerStartListener(this::handlePlayBtn);
         musicPlayer.registerStartListener(this::handleFavoriteBtn);
         musicPlayer.registerStartListener(this::handleLyricSystem);
+        musicPlayer.registerStartListener(this::handleMusicNameLabel);
+        musicPlayer.registerStartListener(this::handleMusicImageView);
+        musicPlayer.registerStartListener(this::handleLyricLabel);
 
+        musicVolumeBar.setValue(80); // default value
         musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
+
                 musicPlayer.setVolumeRatio((new_val.floatValue())/100);
             }
         });
@@ -179,10 +190,20 @@ public class MainGuiController {
         );
     }
 
+    private void handleLyricLabel(MusicData musicData){
+        if(musicData.isLyric()) {
+            lyricLabel.setStyle("-fx-background-color:white;");
+        }
+        else {
+            lyricLabel.setStyle("-fx-background-color:transparent;");
+        }
+    }
+
     private void handlePlayBtn(MusicData musicData){
         Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
         playImageView.setImage(image);
     }
+
     private void handleFavoriteBtn(MusicData musicData){
         if(musicData.isFavorite()){
             Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
@@ -195,14 +216,15 @@ public class MainGuiController {
     }
 
     private void handleLyricSystem(MusicData musicData) {
-        if (lyricPrintSystem!=null) {
-            lyricPrintSystem.cancel(true);
+        if (musicPlayer.getCurrentPlayedMusic().getLyric() != null) {
+            if (lyricPrintSystem != null) {
+                lyricPrintSystem.cancel(true);
+            }
+            lyricPrintSystem = new LyricPrintSystem();
+            lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
+            lyricPrintSystem.setLyricLabel(lyricLabel);
+            lyricPrintSystem.execute();
         }
-
-        lyricPrintSystem = new LyricPrintSystem();
-        lyricPrintSystem.setCurrentMusicPlayer(musicPlayer);
-        lyricPrintSystem.setScene(musicListView.getScene());
-        lyricPrintSystem.execute();
     }
 
     private void handleMusicPlayStarting(MusicData musicData) {
@@ -212,6 +234,14 @@ public class MainGuiController {
             Date currentDate = Date.from(ZonedDateTime.now().toInstant());
             musicData.setRecentPlayedDate(currentDate);
         }
+    }
+
+    private void handleMusicNameLabel(MusicData musicData){
+        nameLabel.setText(musicData.getTitle());
+    }
+
+    private void handleMusicImageView(MusicData musicData){
+        musicImageView.setImage(musicData.getImage());
     }
 
     private void setReferenceState(ListReferenceState newState) {
@@ -336,15 +366,19 @@ public class MainGuiController {
     }
     @FXML
     private void clickPlayBtn(){
-        if(musicPlayer.isPaused()) {
-            musicPlayer.resumePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
-            playImageView.setImage(image);
+        if(musicPlayer.getCurrentPlayedMusic() == null){
+            System.out.println("Plz set music");
         }
-        else{
-            musicPlayer.pausePlay();
-            Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
-            playImageView.setImage(image);
+        else {
+            if (musicPlayer.isPaused()) {
+                musicPlayer.resumePlay();
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/pause.png"));
+                playImageView.setImage(image);
+            } else {
+                musicPlayer.pausePlay();
+                Image image = new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg"));
+                playImageView.setImage(image);
+            }
         }
     }
     @FXML
