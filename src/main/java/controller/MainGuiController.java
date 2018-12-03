@@ -99,7 +99,7 @@ public class MainGuiController {
         musicProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
-                System.out.println(new_val);
+                musicPlayer.playFromLengthRatio((double)old_val/100);
             }
         });
 
