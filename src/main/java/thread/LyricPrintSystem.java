@@ -1,7 +1,6 @@
 package thread;
 
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import model.music.Lyric;
 import model.music.MusicData;
@@ -19,7 +18,6 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
     private long currentMusicTime;
     private String lyricPart;
 
-    private Scene scene;
     private Label lyricLabel;
 
     public LyricPrintSystem(){
@@ -68,11 +66,7 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
     public void setCurrentMusicPlayer(MusicPlayer currentMusicPlayer){
         this.currentMusicPlayer = currentMusicPlayer;
     }
-    public void setScene(Scene scene) {
-        this.scene = scene;
-        setLabelOnScene(scene);
-    }
-    private void setLabelOnScene(Scene scene){
-        this.lyricLabel = (Label) scene.lookup("#lyricLabel");
+    public void setLyricLabel(Label label) {
+        this.lyricLabel = label;
     }
 }
