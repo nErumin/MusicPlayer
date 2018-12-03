@@ -413,7 +413,7 @@ public class MainGuiController {
 
         Image loopImage = musicPlayer.isLooping() ?
             new Image(getClass().getClassLoader().getResourceAsStream("image/loop.png")) :
-            new Image(getClass().getClassLoader().getResourceAsStream("image/favorite-star.png"));
+            new Image(getClass().getClassLoader().getResourceAsStream("image/unloop.png"));
 
         if (musicPlayer.isLooping() == false) {
             iterator.setIteratorDirection(new LoopDirection());
