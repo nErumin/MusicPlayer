@@ -24,7 +24,7 @@ public class LyricParser {
 
     public void splitLyric(){
         File maybeLyricFile = new File(this.filePath);
-        if(!maybeLyricFile.exists()) return;
+        if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
             allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.ISO_8859_1);
