@@ -62,12 +62,8 @@ public class LyricPrintSystem  extends SwingWorker<Void, Void> {
                 lyricLabel.setText(lyricPart);
             });
 
-            long termEnd,termStart;
-            termEnd = currentMusicLyric.getMicroTime(currentLyricTime[start+1]);
-            termStart = currentMusicLyric.getMicroTime(currentLyricTime[start]);
-//            System.out.println(termStart +"/"+ termEnd+"/start = "+start);
             try {
-                sleep((termEnd-termStart)/1000);
+                sleep(10);
             } catch (InterruptedException e) {
                 System.out.println("에러발생");
                 e.printStackTrace();
