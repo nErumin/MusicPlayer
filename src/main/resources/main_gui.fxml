@@ -44,14 +44,14 @@
           <center>
              <SplitPane dividerPositions="0.5622489959839357" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                 <AnchorPane maxWidth="252.0" minHeight="0.0" minWidth="252.0" prefHeight="160.0" prefWidth="100.0">
                       <children>
                          <ListView id="musicList" fx:id="musicListView" layoutX="21.0" layoutY="47.0" onMouseClicked="#handleMusicListItemClicked" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                       </children>
                   </AnchorPane>
                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                      <items>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane maxHeight="185.0" minHeight="185.0" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <ImageView id="musicImageView" fx:id="musicImageView" fitHeight="185.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                               <Label id="lyricLabel" fx:id="lyricLabel" prefHeight="50.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
