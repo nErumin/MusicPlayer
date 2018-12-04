@@ -3,6 +3,7 @@ package controller;
 import io.DirectoryReader;
 import io.FileExtensionFilteredDirectoryReader;
 import io.NonRecursiveDirectoryReader;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -80,13 +81,7 @@ public class MainGuiController {
 
         lyricLabel.setWrapText(true);
 
-        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
-        musicPlayer.registerStartListener(this::handlePlayBtn);
-        musicPlayer.registerStartListener(this::handleFavoriteBtn);
-        musicPlayer.registerStartListener(this::handleLyricSystem);
-        musicPlayer.registerStartListener(this::handleMusicNameLabel);
-        musicPlayer.registerStartListener(this::handleMusicImageView);
-        musicPlayer.registerStartListener(this::handleLyricLabel);
+        registerToMusicPlayer();
 
         musicVolumeBar.setValue(80); // default value
         musicVolumeBar.valueProperty().addListener(new ChangeListener<Number>() {
@@ -99,7 +94,7 @@ public class MainGuiController {
         musicProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
-                musicPlayer.playFromLengthRatio((double)old_val/100);
+                musicPlayer.playFromLengthRatio((double)new_val/100);
             }
         });
 
@@ -112,6 +107,17 @@ public class MainGuiController {
         favoriteReferenceState = new FavoriteReferenceState(musicFiles);
 
         setReferenceState(fullReferenceState);
+    }
+
+    private void registerToMusicPlayer(){
+        musicPlayer.registerStartListener(this::handleMusicPlayStarting);
+        musicPlayer.registerStartListener(this::handlePlayBtn);
+        musicPlayer.registerStartListener(this::handleFavoriteBtn);
+        musicPlayer.registerStartListener(this::handleLyricSystem);
+        musicPlayer.registerStartListener(this::handleMusicNameLabel);
+        musicPlayer.registerStartListener(this::handleMusicImageView);
+        musicPlayer.registerStartListener(this::handleLyricLabel);
+        musicPlayer.registerStartListener(this::handleMusicProgressBar);
     }
 
     private void initializeShortcut() {
@@ -237,7 +243,13 @@ public class MainGuiController {
     }
 
     private void handleMusicNameLabel(MusicData musicData){
-        nameLabel.setText(musicData.getTitle());
+        Platform.runLater(()->{
+            nameLabel.setText(musicData.getTitle());
+        });
+    }
+
+    private void handleMusicProgressBar(MusicData musicData){
+        musicProgressBar.setValue(0);
     }
 
     private void handleMusicImageView(MusicData musicData){
