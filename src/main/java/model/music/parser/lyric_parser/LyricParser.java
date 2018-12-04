@@ -69,7 +69,13 @@ public class LyricParser {
 
 
     public Lyric getLyric(){
-        return new Lyric(this.lrc,this.time);
+
+        if(this.time[1][2] == 0) {
+            return null;
+        }
+        else{
+            return new Lyric(this.lrc,this.time);
+        }
     }
 
 
