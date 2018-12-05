@@ -20,14 +20,12 @@ public class LyricParser {
 
     public void splitLyric(){
         File maybeLyricFile = new File(this.filePath);
-        System.out.println(maybeLyricFile);
         if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
             BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"utf-8"));
             String line  =  br.readLine();
-            System.out.println(line);
-            
+
             while(!(line == null)) {
                 allLyricString.add(line);
                 line = br.readLine();
