@@ -3,12 +3,8 @@ package model.music.parser.lyric_parser;
 import model.music.Lyric;
 
 import java.io.*;
-import java.nio.charset.MalformedInputException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
 
 public class LyricParser {
     protected String filePath;
@@ -16,7 +12,7 @@ public class LyricParser {
     private String[] lrcTime = new String[1000];
     private String[] lrc = new String[1000];
     private String[] index = new String[10];
-    List<String> allLyricString;
+    ArrayList<String> allLyricString = new ArrayList<>();
     public LyricParser(String filePath) {
         this.filePath = filePath.replace(".mp3",".lrc");
         splitLyric();
@@ -24,18 +20,20 @@ public class LyricParser {
 
     public void splitLyric(){
         File maybeLyricFile = new File(this.filePath);
+        System.out.println(maybeLyricFile);
         if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
-
-            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(maybeLyricFile),"utf-8"));
-            String line  =  null;
-
-            if ((line=br.readLine()) != null)
-            {
+            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"utf-8"));
+            String line  =  br.readLine();
+            System.out.println(line);
+            System.out.println(br.readLine());
+            System.out.println(br.readLine());
+            System.out.println(br.readLine());
+            while(!(line == null)) {
                 allLyricString.add(line);
+                line = br.readLine();
             }
-            allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.UTF_8);
         } catch (NoSuchFileException e ) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -71,7 +69,6 @@ public class LyricParser {
             continue;
 //            System.out.println(lrcTime[i]);
 //            System.out.println(time[i][0] + "/" + time[i][1] + "/" + time[i][2]);
-
         }
     }
 
