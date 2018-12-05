@@ -18,6 +18,9 @@ public class MainGui extends Application {
         primaryStage.setTitle("MP3 Player");
         primaryStage.setMinHeight(440);
         primaryStage.setMinWidth(620);
+        primaryStage.setMaxHeight(440);
+        primaryStage.setMaxWidth(620);
+
         primaryStage.setScene(new Scene(root, 600, 400));
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
