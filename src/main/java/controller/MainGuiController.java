@@ -80,6 +80,7 @@ public class MainGuiController {
         musicFiles.addListener(this::handleFileListChanged);
 
         lyricLabel.setWrapText(true);
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
 
         registerToMusicPlayer();
 
@@ -201,7 +202,6 @@ public class MainGuiController {
             lyricLabel.setStyle("-fx-background-color:white;");
         }
         else {
-
             lyricLabel.setStyle("-fx-background-color:transparent;");
         }
     }
@@ -376,6 +376,12 @@ public class MainGuiController {
     @FXML
     private void clickStopBtn(){
         musicPlayer.stopPlay();
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
+        musicProgressBar.setValue(0);
+        playImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg")));
+        nameLabel.setText(null);
+        lyricLabel.setText(null);
+        lyricLabel.setStyle("-fx-background-color:transparent;");
     }
     @FXML
     private void clickPlayBtn(){
