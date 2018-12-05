@@ -23,7 +23,7 @@ public class LyricParser {
         if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
-            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"utf-8"));
+            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"CP949"));
             String line  =  br.readLine();
 
             while(!(line == null)) {
