@@ -43,6 +43,7 @@ public class MusicProxy implements MusicData {
 
     @Override
     public Lyric getLyric() {
+        nullCheck();
         if(isLyric()) {
             return lyric;
         }
