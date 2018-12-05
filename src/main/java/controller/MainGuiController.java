@@ -304,9 +304,9 @@ public class MainGuiController {
             new NonRecursiveDirectoryReader(), Arrays.asList("mp3", "wav")
         );
 
-        musicFiles.clear();
-
         if (chosenDirectory != null) {
+            musicFiles.clear();
+            
             fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
         }
 
@@ -372,7 +372,7 @@ public class MainGuiController {
         if (musicPlayer.isLooping()) {
             musicIterator.setIteratorDirection(new LoopDirection());
         }
-        
+
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
     }
