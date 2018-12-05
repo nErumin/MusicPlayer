@@ -201,6 +201,7 @@ public class MainGuiController {
             lyricLabel.setStyle("-fx-background-color:white;");
         }
         else {
+
             lyricLabel.setStyle("-fx-background-color:transparent;");
         }
     }

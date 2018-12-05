@@ -2,8 +2,8 @@ package model.music.parser.lyric_parser;
 
 import model.music.Lyric;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -27,7 +27,15 @@ public class LyricParser {
         if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
-            allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.ISO_8859_1);
+
+            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(maybeLyricFile),"utf-8"));
+            String line  =  null;
+
+            if ((line=br.readLine()) != null)
+            {
+                allLyricString.add(line);
+            }
+            allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.UTF_8);
         } catch (NoSuchFileException e ) {
             e.printStackTrace();
         } catch (IOException e) {
