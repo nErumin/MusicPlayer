@@ -27,9 +27,7 @@ public class LyricParser {
             BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"utf-8"));
             String line  =  br.readLine();
             System.out.println(line);
-            System.out.println(br.readLine());
-            System.out.println(br.readLine());
-            System.out.println(br.readLine());
+            
             while(!(line == null)) {
                 allLyricString.add(line);
                 line = br.readLine();
