@@ -326,6 +326,10 @@ public class MainGuiController {
     private void startMusicPlayer(MusicIterator musicIterator) {
         musicPlayer.stopPlay();
 
+        if (musicPlayer.isLooping()) {
+            musicIterator.setIteratorDirection(new LoopDirection());
+        }
+        
         musicPlayer.setIterationMode(musicIterator);
         musicPlayer.startPlay();
     }
