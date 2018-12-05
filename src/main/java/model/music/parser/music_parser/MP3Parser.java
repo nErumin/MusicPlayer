@@ -33,9 +33,16 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildTitle() {
-        if(tag!=null)
-            super.title = tag.getFirst(FieldKey.TITLE);
+        String tmpTitle=null;
+        if(tag!=null) {
+            try {
+                tmpTitle = new String(tag.getFirst(FieldKey.TITLE).getBytes("ISO-8859-1"),"CP949");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
 
+        this.title = tmpTitle;
         return this;
     }
 
@@ -56,16 +63,29 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildArtist() {
-        if(tag!=null)
-            super.artist = tag.getFirst(FieldKey.ARTIST);
+        String tmpArtist=null;
+        if(tag!=null) {
+            try {
+                tmpArtist = new String(tag.getFirst(FieldKey.ARTIST).getBytes("ISO-8859-1"),"CP949");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        this.artist = tmpArtist;
         return this;
     }
 
     @Override
     public MusicParser buildAlbumName() {
-
-        if(tag!=null)
-            super.albumName = tag.getFirst(FieldKey.ALBUM);
+        String tmpAlbumName=null;
+        if(tag!=null) {
+            try {
+                tmpAlbumName = new String(tag.getFirst(FieldKey.ARTIST).getBytes("ISO-8859-1"),"CP949");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        this.albumName = tmpAlbumName;
         return this;
     }
 
