@@ -2,13 +2,9 @@ package model.music.parser.lyric_parser;
 
 import model.music.Lyric;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.*;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
 
 public class LyricParser {
     protected String filePath;
@@ -16,7 +12,7 @@ public class LyricParser {
     private String[] lrcTime = new String[1000];
     private String[] lrc = new String[1000];
     private String[] index = new String[10];
-    List<String> allLyricString;
+    ArrayList<String> allLyricString = new ArrayList<>();
     public LyricParser(String filePath) {
         this.filePath = filePath.replace(".mp3",".lrc");
         splitLyric();
@@ -24,10 +20,16 @@ public class LyricParser {
 
     public void splitLyric(){
         File maybeLyricFile = new File(this.filePath);
-        if(!maybeLyricFile.exists()) return;
+        if(!maybeLyricFile.exists()||!maybeLyricFile.toString().contains(".lrc")) return;
 
         try {
-            allLyricString = Files.readAllLines(Paths.get(this.filePath), StandardCharsets.ISO_8859_1);
+            BufferedReader br  =  new BufferedReader(new InputStreamReader(new FileInputStream(this.filePath),"CP949"));
+            String line  =  br.readLine();
+
+            while(!(line == null)) {
+                allLyricString.add(line);
+                line = br.readLine();
+            }
         } catch (NoSuchFileException e ) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -63,13 +65,18 @@ public class LyricParser {
             continue;
 //            System.out.println(lrcTime[i]);
 //            System.out.println(time[i][0] + "/" + time[i][1] + "/" + time[i][2]);
-
         }
     }
 
 
     public Lyric getLyric(){
-        return new Lyric(this.lrc,this.time);
+
+        if(this.time[1][2] == 0) {
+            return null;
+        }
+        else{
+            return new Lyric(this.lrc,this.time);
+        }
     }
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -16,6 +17,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import view.WrappedImageView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainGuiController">
    <children>
        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="600" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -43,23 +45,27 @@
           <center>
              <SplitPane dividerPositions="0.5622489959839357" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                 <AnchorPane minWidth="252.0" prefHeight="160.0" prefWidth="100.0">
                       <children>
                          <ListView id="musicList" fx:id="musicListView" layoutX="21.0" layoutY="47.0" onMouseClicked="#handleMusicListItemClicked" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                       </children>
                   </AnchorPane>
                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                      <items>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane minHeight="185.0" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ImageView id="musicImage" fx:id="musicImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
+                              <WrappedImageView id="musicImageView" fx:id="musicImageView" fitHeight="185.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Label id="lyricLabel" fx:id="lyricLabel" prefHeight="50.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding></Label>
+                            </children>
                         </AnchorPane>
                          <BorderPane prefHeight="200.0" prefWidth="200.0">
                             <center>
                                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                   <top>
-                                     <Slider id="musicProgressBar" fx:id="musicProgressBar"  BorderPane.alignment="CENTER" />
+                                     <Slider id="musicProgressBar" fx:id="musicProgressBar" BorderPane.alignment="CENTER" />
                                   </top>
                                   <bottom>
                                      <Slider id="musicVolumeBar" fx:id="musicVolumeBar" BorderPane.alignment="CENTER" />
@@ -78,7 +84,7 @@
                                         <children>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                               <children>
-                                                 <Button fx:id="seekPreviousBtn" layoutX="6.0" layoutY="13.0" onMouseClicked="#clickSeekPreviousBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="seekPreviousBtn" layoutX="6.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#clickSeekPreviousBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                    <graphic>
                                                       <ImageView fx:id="seekPreviousImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -90,7 +96,7 @@
                                            </AnchorPane>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                               <children>
-                                                 <Button fx:id="playBtn" layoutX="6.0" layoutY="13.0" onMouseClicked="#clickPlayBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="playBtn" layoutX="6.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#clickPlayBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                    <graphic>
                                                       <ImageView fx:id="playImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -102,7 +108,7 @@
                                            </AnchorPane>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                                               <children>
-                                                 <Button fx:id="seekNextBtn" layoutX="6.0" layoutY="13.0" onMouseClicked="#clickSeekNextBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="seekNextBtn" layoutX="6.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#clickSeekNextBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                   <graphic>
                                                       <ImageView fx:id="seekNextImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                           <image>
@@ -114,7 +120,7 @@
                                            </AnchorPane>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                               <children>
-                                                 <Button fx:id="loopBtn" layoutX="6.0" layoutY="12.0" onMouseClicked="#clickLoopBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="loopBtn" layoutX="6.0" layoutY="12.0" mnemonicParsing="false" onMouseClicked="#clickLoopBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                      <graphic>
                                                          <ImageView fx:id="loopImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                              <image>
@@ -126,7 +132,7 @@
                                            </AnchorPane>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                               <children>
-                                                 <Button fx:id="stopBtn" layoutX="6.0" layoutY="12.0" onMouseClicked="#clickStopBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="stopBtn" layoutX="6.0" layoutY="12.0" mnemonicParsing="false" onMouseClicked="#clickStopBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                      <graphic>
                                                          <ImageView fx:id="stopImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                              <image>
@@ -138,7 +144,7 @@
                                            </AnchorPane>
                                            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                               <children>
-                                                 <Button fx:id="favoriteBtn" layoutX="9.0" layoutY="9.0" onMouseClicked="#clickFavoriteBtn" mnemonicParsing="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                 <Button fx:id="favoriteBtn" layoutX="9.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#clickFavoriteBtn" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                      <graphic>
                                                          <ImageView fx:id="favoriteImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                              <image>
@@ -156,7 +162,7 @@
                             <top>
                                <AnchorPane prefHeight="20.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                   <children>
-                                     <Label id="lyricLabel" fx:id="lyricLabel" layoutX="16.0" layoutY="4.0" prefHeight="18.0" prefWidth="190.0" text="Label" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                                     <Label id="nameLabel" fx:id="nameLabel" layoutX="16.0" layoutY="4.0" prefHeight="18.0" prefWidth="190.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
                                   </children>
                                </AnchorPane>
                             </top>
