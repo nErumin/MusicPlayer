@@ -119,6 +119,7 @@ public class MainGuiController {
         musicPlayer.registerStartListener(this::handleMusicImageView);
         musicPlayer.registerStartListener(this::handleLyricLabel);
         musicPlayer.registerStartListener(this::handleMusicProgressBar);
+        musicPlayer.registerEndListener(this::handleMainGui);
     }
 
     private void initializeShortcut() {
@@ -195,6 +196,15 @@ public class MainGuiController {
                 }
             }
         );
+    }
+
+    private void handleMainGui(MusicData musicData){
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
+        musicProgressBar.setValue(0);
+        playImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg")));
+        nameLabel.setText("");
+        lyricLabel.setText("");
+        lyricLabel.setStyle("-fx-background-color:transparent;");
     }
 
     private void handleLyricLabel(MusicData musicData){
@@ -385,8 +395,8 @@ public class MainGuiController {
         musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
         musicProgressBar.setValue(0);
         playImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg")));
-        nameLabel.setText(null);
-        lyricLabel.setText(null);
+        nameLabel.setText("");
+        lyricLabel.setText("");
         lyricLabel.setStyle("-fx-background-color:transparent;");
     }
     @FXML
