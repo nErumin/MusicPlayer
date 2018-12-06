@@ -86,6 +86,7 @@ public class MainGuiTest extends GuiTest {
         assertTrue(musicListView.getItems().get(0).toString().equals("Havana by Camila Cabello.mp3"));
         assertTrue(musicListView.getItems().get(1).toString().equals("언니네 이발관-10-산들산들.mp3"));
         assertTrue(musicListView.getItems().get(2).toString().equals("엑소_Tempo.mp3"));
+
     }
     @Test
     public void stage2_testPlayingMusic(){
@@ -124,10 +125,10 @@ public class MainGuiTest extends GuiTest {
         ListView musicListView = GuiTest.find("#musicListView");
         System.out.println(musicListView.getItems().get(0).toString());
         assertTrue(musicListView.getItems().get(0).toString().equals("Havana by Camila Cabello.mp3"));
-
     }
     @Test
     public void stage4_testRecentPlayedMusicTab(){
+        click("#fullMusicListBtn");
         click("#fileMenu").click("Open Folder");
 
         type("D");
@@ -135,7 +136,7 @@ public class MainGuiTest extends GuiTest {
         type(KeyCode.DOWN).type(KeyCode.ENTER);
         type("EtcDocument").type(KeyCode.ENTER);
         type("Music").type(KeyCode.ENTER).type(KeyCode.ENTER);
-        sleep(500);
+        sleep(1000);
 
         doubleClick("언니네 이발관-10-산들산들.mp3");
 
