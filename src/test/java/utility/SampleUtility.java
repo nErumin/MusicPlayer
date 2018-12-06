@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 import model.music.Music;
 import model.music.MusicData;

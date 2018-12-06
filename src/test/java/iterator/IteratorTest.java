@@ -1,6 +1,6 @@
 package iterator;
 
-import Utility.SampleUtility;
+import utility.SampleUtility;
 import model.music.MusicData;
 import org.junit.Before;
 
