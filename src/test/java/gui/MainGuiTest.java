@@ -75,77 +75,74 @@ public class MainGuiTest extends GuiTest {
     public void stage1_testGetMusic(){
         click("#fileMenu").click("Open Folder");
 
-        type("D");
-        sleep(500);
-        type(KeyCode.DOWN).type(KeyCode.ENTER);
-        type("EtcDocument").type(KeyCode.ENTER);
-        type("Music").type(KeyCode.ENTER).type(KeyCode.ENTER);
+        type("sample").push(KeyCode.SHIFT, KeyCode.MINUS).type("musics").type(KeyCode.ENTER).type(KeyCode.ENTER);
         sleep(500);
 
         ListView musicListView = GuiTest.find("#musicListView");
-        assertTrue(musicListView.getItems().get(0).toString().equals("Havana by Camila Cabello.mp3"));
-        assertTrue(musicListView.getItems().get(1).toString().equals("언니네 이발관-10-산들산들.mp3"));
-        assertTrue(musicListView.getItems().get(2).toString().equals("엑소_Tempo.mp3"));
+        assertTrue(musicListView.getItems().get(0).toString().equals("DropSword.wav"));
+        assertTrue(musicListView.getItems().get(1).toString().equals("Happy-music.mp3"));
+        assertTrue(musicListView.getItems().get(2).toString().equals("Laser.wav"));
+        assertTrue(musicListView.getItems().get(3).toString().equals("applause3.wav"));
 
+        click("#fileMenu").click("Open Folder");
+
+        type("sample").push(KeyCode.SHIFT, KeyCode.MINUS).type("musics").type(KeyCode.ENTER);
+        type("inner").push(KeyCode.SHIFT, KeyCode.MINUS).type("directory").type(KeyCode.ENTER).type(KeyCode.ENTER);
+        sleep(500);
+
+        assertTrue(musicListView.getItems().get(0).toString().equals("Ding-dong.wav"));
+        assertTrue(musicListView.getItems().get(1).toString().equals("Loud_Bang.wav"));
+        assertTrue(musicListView.getItems().get(2).toString().equals("Roar.wav"));
+        assertTrue(musicListView.getItems().get(3).toString().equals("Wrong-alert-beep-sound.mp3"));
     }
     @Test
     public void stage2_testPlayingMusic(){
         click("#fileMenu").click("Open Folder");
 
-        type("D");
-        sleep(500);
-        type(KeyCode.DOWN).type(KeyCode.ENTER);
-        type("EtcDocument").type(KeyCode.ENTER);
-        type("Music").type(KeyCode.ENTER).type(KeyCode.ENTER);
+        type("sample").push(KeyCode.SHIFT, KeyCode.MINUS).type("musics").type(KeyCode.ENTER).type(KeyCode.ENTER);
         sleep(500);
 
         ListView musicListView = GuiTest.find("#musicListView");
-        doubleClick(musicListView.getItems().get(0).toString());
+        String testName = musicListView.getItems().get(1).toString();
+        doubleClick(testName);
 
-        this.sleep(5000);
-        assertTrue(((Label)GuiTest.find("#nameLabel")).getText().equals("Havana by Camila Cabello"));
+        this.sleep(500);
+        assertTrue(((Label)GuiTest.find("#nameLabel")).getText().equals("Happy-music"));
     }
     @Test
     public void stage3_testFavoriteMusic(){
         click("#fileMenu").click("Open Folder");
 
-        type("D");
-        sleep(500);
-        type(KeyCode.DOWN).type(KeyCode.ENTER);
-        type("EtcDocument").type(KeyCode.ENTER);
-        type("Music").type(KeyCode.ENTER).type(KeyCode.ENTER);
+        type("sample").push(KeyCode.SHIFT, KeyCode.MINUS).type("musics").type(KeyCode.ENTER).type(KeyCode.ENTER);
         sleep(500);
 
-        doubleClick("Havana by Camila Cabello.mp3");
+        ListView musicListView = GuiTest.find("#musicListView");
+        String testName = musicListView.getItems().get(1).toString();
+        doubleClick(testName);
 
-        this.sleep(5000);
+        this.sleep(4000);
 
         click("#favoriteBtn");
         click("#favoriteMusicListBtn");
-        ListView musicListView = GuiTest.find("#musicListView");
-        System.out.println(musicListView.getItems().get(0).toString());
-        assertTrue(musicListView.getItems().get(0).toString().equals("Havana by Camila Cabello.mp3"));
+        assertTrue(musicListView.getItems().get(0).toString().equals(testName));
+
+        click("#fullMusicListBtn");
     }
     @Test
     public void stage4_testRecentPlayedMusicTab(){
-        click("#fullMusicListBtn");
         click("#fileMenu").click("Open Folder");
 
-        type("D");
+        type("sample").push(KeyCode.SHIFT, KeyCode.MINUS).type("musics").type(KeyCode.ENTER).type(KeyCode.ENTER);
         sleep(500);
-        type(KeyCode.DOWN).type(KeyCode.ENTER);
-        type("EtcDocument").type(KeyCode.ENTER);
-        type("Music").type(KeyCode.ENTER).type(KeyCode.ENTER);
-        sleep(1000);
 
-        doubleClick("언니네 이발관-10-산들산들.mp3");
+        ListView musicListView = GuiTest.find("#musicListView");
+        String testName = musicListView.getItems().get(1).toString();
+        doubleClick(testName);
 
         this.sleep(4000);
 
         click("#recentPlayedMusicListBtn");
-        ListView musicListView = GuiTest.find("#musicListView");
-        System.out.println(musicListView.getItems().get(0).toString());
-        assertTrue(musicListView.getItems().get(0).toString().equals("언니네 이발관-10-산들산들.mp3"));
+        assertTrue(musicListView.getItems().get(0).toString().equals(testName));
     }
     @Test
     public void stage5_testAlarm(){
