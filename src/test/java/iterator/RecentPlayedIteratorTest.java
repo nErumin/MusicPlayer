@@ -80,7 +80,7 @@ public class RecentPlayedIteratorTest extends IteratorTest {
     public void testHasNextNoElementRecentPlayedIterator() {
         MusicIterator musicIterator = new RecentPlayedMusicIterator(musics, new ForwardDirection());
 
-        musicIterator.resetFor(musics.get(musics.size() - 1));
+        musicIterator.resetFor(musics.get(musics.size() - 2));
 
         Assert.assertThat(musicIterator.hasNext(), is(false));
     }
