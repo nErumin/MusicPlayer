@@ -48,7 +48,8 @@ public class RecentPlayedMusicIterator extends MusicIterator {
 
         int nextPosition = currentPosition;
         nextPosition = iteratorDirection.nextPosition(musicDataCollection, nextPosition);
-        while (musicDataCollection.get(nextPosition).getRecentPlayedDate() == null) {
+        while (nextPosition < musicDataCollection.size() &&
+               musicDataCollection.get(nextPosition).getRecentPlayedDate() == null) {
             nextPosition = iteratorDirection.nextPosition(musicDataCollection, nextPosition);
         }
 

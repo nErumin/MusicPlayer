@@ -12,6 +12,8 @@ public class MusicProxy implements MusicData {
     private Lyric lyric;
     private String filePath;
     private boolean isLyric = false;
+    private boolean isFavorite = false;
+    private Date recentPlayedDate;
 
     public MusicProxy(String filePath) {
         this.filePath = filePath;
@@ -58,30 +60,38 @@ public class MusicProxy implements MusicData {
 
     @Override
     public boolean isFavorite() {
-        nullCheck();
-
-        return music.isFavorite();
+        if (music == null) {
+            return isFavorite;
+        } else {
+            return music.isFavorite();
+        }
     }
 
     @Override
     public void setFavorite(boolean isFavorite) {
-        nullCheck();
-
-        music.setFavorite(isFavorite);
+        if (music == null) {
+            this.isFavorite = isFavorite;
+        } else {
+            music.setFavorite(isFavorite);
+        }
     }
 
     @Override
     public Date getRecentPlayedDate() {
-        nullCheck();
-
-        return music.getRecentPlayedDate();
+        if (music == null) {
+            return recentPlayedDate;
+        } else {
+            return music.getRecentPlayedDate();
+        }
     }
 
     @Override
     public void setRecentPlayedDate(Date recentPlayedDate) {
-        nullCheck();
-
-        music.setRecentPlayedDate(recentPlayedDate);
+        if (music == null) {
+            this.recentPlayedDate = recentPlayedDate;
+        } else {
+            music.setRecentPlayedDate(recentPlayedDate);
+        }
     }
 
     @Override
@@ -101,6 +111,9 @@ public class MusicProxy implements MusicData {
                                       .buildAlbumName()
                                       .buildAudioStream()
                                       .build();
+
+            music.setFavorite(isFavorite);
+            music.setRecentPlayedDate(recentPlayedDate);
         }
         if(lyric == null){
             try {

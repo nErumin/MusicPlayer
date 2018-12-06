@@ -1,6 +1,7 @@
 package model.music.parser.music_parser;
 
 import javafx.embed.swing.SwingFXUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
@@ -33,16 +34,7 @@ public class MP3Parser extends MusicParser {
 
     @Override
     public MusicParser buildTitle() {
-        String tmpTitle=null;
-        if(tag!=null) {
-            try {
-                tmpTitle = new String(tag.getFirst(FieldKey.TITLE).getBytes("ISO-8859-1"),"CP949");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        this.title = tmpTitle;
+        this.title = FilenameUtils.getBaseName(file.getPath());
         return this;
     }
 
