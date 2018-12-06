@@ -3,15 +3,9 @@ package gui;
 
 import com.google.common.util.concurrent.SettableFuture;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.loadui.testfx.GuiTest;
 import org.loadui.testfx.utils.FXTestUtils;
@@ -20,7 +14,6 @@ import view.MainGui;
 
 import java.util.concurrent.TimeUnit;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 ;
@@ -65,7 +58,7 @@ public class MainGuiTest extends GuiTest {
     protected Parent getRootNode() {
         return stage.getScene().getRoot();
     }
-
+    /*
     @Test
     public void stage0_testInitialSetting(){
         assertTrue(((Slider)GuiTest.find("#musicVolumeBar")).getValue() == 80);
@@ -155,4 +148,5 @@ public class MainGuiTest extends GuiTest {
         assertTrue(GuiTest.find("#alarmShowPane").isVisible());
         assertTrue(((TextArea)GuiTest.find("#alarmShowTextArea")).getText().equals("AlarmTestTest"));
     }
+    */
 }
