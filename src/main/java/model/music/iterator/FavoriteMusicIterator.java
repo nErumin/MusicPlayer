@@ -48,7 +48,8 @@ public class FavoriteMusicIterator extends MusicIterator {
 
         int nextPosition = currentPosition;
         nextPosition = iteratorDirection.nextPosition(musicDataCollection, nextPosition);
-        while (musicDataCollection.get(nextPosition).isFavorite()) {
+        while (nextPosition < musicDataCollection.size() &&
+               musicDataCollection.get(nextPosition).isFavorite() == false) {
             nextPosition = iteratorDirection.nextPosition(musicDataCollection, nextPosition);
         }
 
