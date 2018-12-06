@@ -1,5 +1,8 @@
 package model.music.parser.music_parser;
 
+import javafx.scene.image.Image;
+import org.apache.commons.io.FilenameUtils;
+
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +20,13 @@ public class WAVParser extends MusicParser {
     }
     @Override
     public MusicParser buildTitle() {
+        this.title = FilenameUtils.getBaseName(file.getPath());
         return this;
     }
 
     @Override
     public MusicParser buildImage(){
+        this.image = new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg"));
         return this;
     }
 
