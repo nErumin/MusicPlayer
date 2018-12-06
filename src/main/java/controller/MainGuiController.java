@@ -298,6 +298,8 @@ public class MainGuiController {
     @FXML
     private void handleOpenFolder() throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("."));
+
         File chosenDirectory = directoryChooser.showDialog(null);
 
         DirectoryReader directoryReader = new FileExtensionFilteredDirectoryReader(
@@ -306,7 +308,7 @@ public class MainGuiController {
 
         if (chosenDirectory != null) {
             musicFiles.clear();
-            
+
             fillMusicFileListView(directoryReader.getFiles(chosenDirectory.getPath()));
         }
 

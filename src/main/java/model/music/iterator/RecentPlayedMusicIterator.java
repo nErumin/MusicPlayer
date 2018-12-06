@@ -25,9 +25,10 @@ public class RecentPlayedMusicIterator extends MusicIterator {
     public void resetFor(MusicData musicData) {
         List<MusicData> musicDataCollection = getMusics();
 
-        for (currentPosition = 0; currentPosition < musicDataCollection.size(); ++currentPosition) {
-            MusicData currentMusic = musicDataCollection.get(currentPosition);
+        for (int position = 0; position < musicDataCollection.size(); ++position) {
+            MusicData currentMusic = musicDataCollection.get(position);
             if (currentMusic.equals(musicData) && currentMusic.getRecentPlayedDate() != null) {
+                currentPosition = position;
                 setCurrentMusicData(musicData);
                 return;
             }
