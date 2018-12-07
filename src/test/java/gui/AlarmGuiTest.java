@@ -66,12 +66,13 @@ public class AlarmGuiTest extends GuiTest {
         int hour = currentTime.get(Calendar.HOUR);
         int minute = currentTime.get(Calendar.MINUTE);
 
+        if( hour == 0 ) hour = 12;
         assertTrue(GuiTest.find("#alarmPane").isVisible());
         assertTrue(((TextArea)GuiTest.find("#alarmTextArea")).getText().equals("Alarm"));
         assertTrue(((ComboBox)GuiTest.find("#ampmComboBox")).getSelectionModel().getSelectedIndex() == ampm);
         assertTrue(((ComboBox)GuiTest.find("#hourComboBox")).getSelectionModel().getSelectedIndex() == hour -1);
         assertTrue(((ComboBox)GuiTest.find("#minuteComboBox")).getSelectionModel().getSelectedIndex() == minute);
-
+        click("#alarmSetBtn");
     }
     @Test
     public void stage1_testAlarm(){
