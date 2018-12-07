@@ -1,6 +1,7 @@
 package model.music.parser.music_parser;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -47,7 +48,7 @@ public class MP3Parser extends MusicParser {
             BufferedImage image = (BufferedImage) awk.getImage();
             super.image = SwingFXUtils.toFXImage(image, null);
         } catch (NullPointerException | IOException exception) {
-            super.image = null;
+            super.image = new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg"));
         }
 
         return this;

@@ -80,6 +80,7 @@ public class MainGuiController {
         musicFiles.addListener(this::handleFileListChanged);
 
         lyricLabel.setWrapText(true);
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
 
         registerToMusicPlayer();
 
@@ -118,6 +119,7 @@ public class MainGuiController {
         musicPlayer.registerStartListener(this::handleMusicImageView);
         musicPlayer.registerStartListener(this::handleLyricLabel);
         musicPlayer.registerStartListener(this::handleMusicProgressBar);
+        musicPlayer.registerEndListener(this::handleMainGui);
     }
 
     private void initializeShortcut() {
@@ -196,12 +198,20 @@ public class MainGuiController {
         );
     }
 
+    private void handleMainGui(MusicData musicData){
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
+        musicProgressBar.setValue(0);
+        playImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg")));
+        nameLabel.setText("");
+        lyricLabel.setText("");
+        lyricLabel.setStyle("-fx-background-color:transparent;");
+    }
+
     private void handleLyricLabel(MusicData musicData){
         if(musicData.isLyric()) {
             lyricLabel.setStyle("-fx-background-color:white;");
         }
         else {
-
             lyricLabel.setStyle("-fx-background-color:transparent;");
         }
     }
@@ -382,6 +392,12 @@ public class MainGuiController {
     @FXML
     private void clickStopBtn(){
         musicPlayer.stopPlay();
+        musicImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/defaultImage.jpg")));
+        musicProgressBar.setValue(0);
+        playImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("image/play.jpg")));
+        nameLabel.setText("");
+        lyricLabel.setText("");
+        lyricLabel.setStyle("-fx-background-color:transparent;");
     }
     @FXML
     private void clickPlayBtn(){

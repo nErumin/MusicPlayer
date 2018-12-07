@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class AlarmSettingGui extends Stage implements JustOneWindow {
     private ComboBox<Integer> hourComboBox;
@@ -34,6 +35,18 @@ public class AlarmSettingGui extends Stage implements JustOneWindow {
         ampmComboBox = makeAmPmComboBox(15.0,39.0);
         hourComboBox = makeTimeComboBox("hourComboBox",12,6,145.0,39.0);
         minuteComboBox = makeTimeComboBox("minuteComboBox",59,6,281.0,39.0);
+
+        Calendar currentTime = Calendar.getInstance();
+
+        int ampm = currentTime.get(Calendar.AM_PM);
+        int hour = currentTime.get(Calendar.HOUR);
+        int minute = currentTime.get(Calendar.MINUTE);
+
+        if(hour == 0) hour = 12;
+
+        ampmComboBox.getSelectionModel().select(ampm);
+        hourComboBox.getSelectionModel().select(hour-1);
+        minuteComboBox.getSelectionModel().select(minute);
 
         AnchorPane alarmPane = (AnchorPane) scene.lookup("#alarmPane");
         alarmPane.getChildren().add(ampmComboBox);
