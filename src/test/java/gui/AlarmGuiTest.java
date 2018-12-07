@@ -2,15 +2,20 @@ package gui;
 
 import com.google.common.util.concurrent.SettableFuture;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.junit.Before;
+import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 import org.loadui.testfx.utils.FXTestUtils;
 import org.loadui.testfx.utils.UserInputDetector;
 import view.MainGui;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 public class AlarmGuiTest extends GuiTest {
@@ -51,7 +56,7 @@ public class AlarmGuiTest extends GuiTest {
     protected Parent getRootNode() {
         return stage.getScene().getRoot();
     }
-    /*
+
     @Test
     public void stage0_testInitialSetting(){
         click("#alarmMenu").click("Set Alarm");
@@ -81,5 +86,5 @@ public class AlarmGuiTest extends GuiTest {
         assertTrue(GuiTest.find("#alarmShowPane").isVisible());
         assertTrue(((TextArea)GuiTest.find("#alarmShowTextArea")).getText().equals("AlarmTestTest"));
     }
-    */
+
 }
