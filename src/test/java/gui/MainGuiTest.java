@@ -137,16 +137,5 @@ public class MainGuiTest extends GuiTest {
         click("#recentPlayedMusicListBtn");
         assertTrue(musicListView.getItems().get(0).toString().equals(testName));
     }
-    @Test
-    public void stage5_testAlarm(){
-        click("#alarmMenu").click("Set Alarm");
-
-        click("#alarmTextArea").type("TestTest");
-        click("#alarmSetBtn");
-
-        sleep(62000);
-        assertTrue(GuiTest.find("#alarmShowPane").isVisible());
-        assertTrue(((TextArea)GuiTest.find("#alarmShowTextArea")).getText().equals("AlarmTestTest"));
-    }
     */
 }
