@@ -42,8 +42,6 @@ public class AlarmSettingGui extends Stage implements JustOneWindow {
         int hour = currentTime.get(Calendar.HOUR);
         int minute = currentTime.get(Calendar.MINUTE);
 
-        System.out.println(ampm + hour + minute);
-
         ampmComboBox.getSelectionModel().select(ampm);
         hourComboBox.getSelectionModel().select(hour-1);
         minuteComboBox.getSelectionModel().select(minute);

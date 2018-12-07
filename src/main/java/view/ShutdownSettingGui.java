@@ -26,7 +26,7 @@ public class ShutdownSettingGui extends Stage implements JustOneWindow{
         this.setMinHeight(130);
         this.setMaxWidth(260);
         this.setMaxHeight(130);
-        this.setTitle("Shutdown Window");
+        this.setTitle("Shutdown");
 
         timeComboBox = makeSetTimeComboBox("shutdownTimeComboBox", 80.0, 56.0);
 
