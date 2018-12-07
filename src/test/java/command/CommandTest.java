@@ -95,7 +95,7 @@ public class CommandTest {
         musicPlayer.startPlay();
         Thread.sleep(1000);
 
-        float currentVolumeRatio = 0;
+        float currentVolumeRatio = musicPlayer.getVolumeRatio();
 
         Command command = new VolumeIncreaseCommand(musicPlayer, 0.3f);
         command.execute();

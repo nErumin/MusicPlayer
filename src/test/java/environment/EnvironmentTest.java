@@ -7,6 +7,13 @@ import setting.Environment;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+// Do not run this class's test with any other tests.
+// It will fail because of the Environment is implemented through a singleton.
+
+/**
+ * Do not run this class's tests with any other tests.
+ * It will fail because of the Environment is implemented through a singleton.
+ */
 public class EnvironmentTest {
     @Test
     public void testLinuxEnvironment() {
@@ -28,8 +35,6 @@ public class EnvironmentTest {
         Assert.assertThat(path, is(equalTo("folder/a.txt")));
     }
 
-    /* Do not run this test with other tests.
-       It will fail because of the Environment is implemented through a singleton.
     @Test
     public void testWindowsEnvironment() {
         System.setProperty("os.name", "Windows");
@@ -39,7 +44,6 @@ public class EnvironmentTest {
 
         Assert.assertThat(path, is(equalTo("folder\\a.txt")));
     }
-    */
 
     @Test
     public void testUnknownEnvironment() {
