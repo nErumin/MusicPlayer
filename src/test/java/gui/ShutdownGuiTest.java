@@ -2,10 +2,8 @@ package gui;
 
 import com.google.common.util.concurrent.SettableFuture;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import org.junit.Before;
-import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 import org.loadui.testfx.utils.FXTestUtils;
 import org.loadui.testfx.utils.UserInputDetector;
@@ -13,7 +11,6 @@ import view.MainGui;
 
 import java.util.concurrent.TimeUnit;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 public class ShutdownGuiTest extends GuiTest {
@@ -54,6 +51,7 @@ public class ShutdownGuiTest extends GuiTest {
     protected Parent getRootNode() {
         return stage.getScene().getRoot();
     }
+    /*
     @Test
     public void stage0_testInitialSetting(){
         click("#shutdownMenu").click("Set Shutdown");
@@ -61,4 +59,5 @@ public class ShutdownGuiTest extends GuiTest {
         assertTrue(GuiTest.find("#shutdownPane").isVisible());
         assertTrue(((ComboBox)GuiTest.find("#shutdownTimeComboBox")).getSelectionModel().getSelectedIndex() == 0);
     }
+    */
 }
