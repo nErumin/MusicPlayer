@@ -19,7 +19,7 @@
     -  커맨드/터미널에서 ```java -jar {PROJECT_FOLDER}/build/libs/MusicPlayer.jar```를 직접 입력하여 실행
 
 
-## Team Member (Team #3)
+## Team Member (Team #6)
 Role   | Github ID                                       |
 -------|-------------------------------------------------| 
 Leader | [nErumin](https://github.com/nErumin)           |
