@@ -12,6 +12,20 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    baseName = 'MusicPlayer'
+    version =  '0.0.0'
+    manifest {
+        attributes 'Main-Class' : 'view/MainGui', 'Version' : 0.0
+    }
+    archiveName "MusicPlayer.jar"
+
+    dependsOn configurations.runtime
+    from {
+        configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
+    }
+}
+
 dependencies {
     compile "io.sentry:sentry:1.7.4"
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
